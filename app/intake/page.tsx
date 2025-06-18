@@ -1,5 +1,6 @@
 "use client";
 import IntakeForm from "@/components/features/intake/IntakeForm";
+import Link from "next/link";
 
 export default function IntakePage() {
   return (
@@ -22,6 +23,10 @@ export default function IntakePage() {
         <div className="mt-6 text-center text-sm text-gray-500">
           <p>Your profile data is used to personalize contract analysis and recommendations.</p>
           <p>You can update this information anytime by revisiting this page.</p>
+        </div>
+        
+        <div className="mt-10 flex justify-center">
+          <Link href="/" className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-colors font-semibold">Back to Home</Link>
         </div>
       </div>
     </div>
