@@ -1,0 +1,95 @@
+[
+  {
+    "role_title": "Software Engineer",
+    "level": "Mid-Level",
+    "expected_base_salary_range": "$107,000 - $137,000",
+    "expected_total_comp_range": "$120,000 - $160,000",
+    "expected_equity_range": "$50,000 - $100,000 (over 4 years)",
+    "standard_bonus": "10-15% of base salary annual target",
+    "standard_clauses": [
+      "Confidentiality and Non-Disclosure Agreement (NDA)",
+      "Intellectual Property (IP) assignment",
+      "Non-compete clause (limited by state law)",
+      "At-will employment and termination conditions",
+      "Non-solicitation of clients and employees"
+    ],
+    "typical_vesting_schedule": "4-year vesting with a 1-year cliff, then monthly vesting",
+    "risk_flags": [
+      "No severance clause (implies no guaranteed payout if terminated)",
+      "Overly broad non-compete (especially problematic in states that ban them)",
+      "Clawback provisions on bonuses or equity (e.g. requiring pay-back if leaving)",
+      "Extensive IP claim on personal projects done off-work"
+    ],
+    "negotiation_tips": "Benchmark your salary (use tools like Levels.fyi or Glassdoor) and be prepared to negotiate on total compensation. Highlight your specialized skills or accomplishments to justify a higher equity grant or signing bonus. If the base salary offered is at the top of the band, consider asking for additional stock or a one-time bonus. Ensure any promised bonus or stock refresh is written into the offer."
+  },
+  {
+    "role_title": "Software Engineer",
+    "level": "Senior",
+    "expected_base_salary_range": "$130,000 - $164,000",
+    "expected_total_comp_range": "$160,000 - $240,000",
+    "expected_equity_range": "$100,000 - $200,000 (over 4 years)",
+    "standard_bonus": "15%+ of base salary annual target",
+    "standard_clauses": [
+      "Confidentiality and IP assignment agreements",
+      "Non-compete / Non-solicit clauses (may be limited by jurisdiction)",
+      "At-will employment (termination without cause possible)",
+      "Potential severance clause (often negotiable for senior roles)",
+      "Arbitration clause for dispute resolution"
+    ],
+    "typical_vesting_schedule": "4-year vesting (1-year cliff, then monthly/quarterly vesting)",
+    "risk_flags": [
+      "No severance provision for termination without cause",
+      "Non-compete that limits working for competitors for an excessive period",
+      "Ambiguous bonus/commission structure or employer ability to change it unilaterally",
+      "Lack of 'double-trigger' acceleration (if equity is important and company is acquired)"
+    ],
+    "negotiation_tips": "Demonstrate your impact (e.g., projects led, systems designed) to justify top-of-band pay. Negotiate not just base salary but also equity refreshers or a higher bonus target – senior roles often have flexibility in these areas. If you have competing offers or know market rates, use that data to back your requests. Also consider negotiating severance or role-specific perks (like dedicated training budget or conference attendance) given your seniority."
+  },
+  {
+    "role_title": "Product Manager",
+    "level": "Mid-Level",
+    "expected_base_salary_range": "$90,000 - $130,000",
+    "expected_total_comp_range": "$110,000 - $160,000",
+    "expected_equity_range": "$40,000 - $80,000 (4-year grant value)",
+    "standard_bonus": "10-12% of base salary annual target",
+    "standard_clauses": [
+      "Confidentiality (NDA) and invention assignment",
+      "Non-compete clause (scope often limited to direct competitors for 6-12 months)",
+      "At-will employment clause",
+      "Non-solicitation of clients and employees",
+      "No guaranteed severance (termination handled per company policy)"
+    ],
+    "typical_vesting_schedule": "Standard 4-year vesting (1-year cliff, then monthly/quarterly)",
+    "risk_flags": [
+      "No equity or bonus mentioned (could signal below-market offer)",
+      "Overbroad non-compete restricting future PM roles in the industry",
+      "Unclear IP ownership (ensure personal side projects are excluded)",
+      "Missing severance or termination protections (common at this level, but worth noting)"
+    ],
+    "negotiation_tips": "Highlight your successful product launches or key metrics you've driven when negotiating – this evidence can justify a higher salary or equity grant. If the base salary is at the lower end, consider asking for a larger equity grant or a sign-on bonus. Clarify how performance bonuses are determined; if none exist, you might negotiate for one tied to product outcomes. Also, ensure your job level aligns with your experience – you can negotiate a title upgrade (e.g., to Senior PM) if your experience warrants, which brings a higher pay band."
+  },
+  {
+    "role_title": "Product Manager",
+    "level": "Senior",
+    "expected_base_salary_range": "$130,000 - $180,000",
+    "expected_total_comp_range": "$180,000 - $250,000",
+    "expected_equity_range": "$100,000 - $150,000 (4-year value)",
+    "standard_bonus": "15%+ of base salary annual target",
+    "standard_clauses": [
+      "Strict NDA and IP assignment (handling sensitive product strategy)",
+      "Non-compete clause (tailored to product/industry, often 6-12 months if included)",
+      "At-will employment, with possible severance terms for involuntary separation",
+      "Non-solicitation (cannot poach team or clients post-employment)",
+      "Invention disclosure requirements (must report product ideas related to company)"
+    ],
+    "typical_vesting_schedule": "4 years total (25% at 1-year, then monthly vesting)",
+    "risk_flags": [
+      "Equity grant absent or very low (below market for senior role)",
+      "Non-compete that broadly prevents working in any similar industry for long period",
+      "No definition of bonus criteria (or fully discretionary bonus with no guidelines)",
+      "No severance for a high-level role (consider negotiating one)",
+      "No vesting acceleration on change of control (could lose unvested equity if company sold)"
+    ],
+    "negotiation_tips": "Use data on senior PM compensation (e.g., from salary surveys) to justify your ask at the higher end of the range. Emphasize your leadership impact — for instance, cite revenue or user growth from products you've managed — to argue for more equity or a higher bonus percentage. You can negotiate for a better title (like 'Director of Product' or similar) if the scope is large, which often comes with a pay bump. Also consider negotiating an agreement on severance or accelerated vesting (double-trigger) given the seniority, and ensure any verbal promises (like team expansion, budget commitments) are added to the offer letter."
+  }
+] 
