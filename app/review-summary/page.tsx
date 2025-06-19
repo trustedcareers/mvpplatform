@@ -4,6 +4,7 @@ import { useUser } from '@supabase/auth-helpers-react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import DownloadPDFButton from "@/components/features/pdf/DownloadPDFButton";
 
 interface ReviewSummary {
   id: string;
@@ -153,6 +154,34 @@ export default function ReviewSummaryPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
+        {/* PDF Download Button */}
+        {summary && (
+          <div className="mb-6">
+            <DownloadPDFButton
+              summary={{
+                alignment: summary.alignment_rating,
+                recommendation: summary.recommendation,
+                strengths: summary.strengths,
+                weaknesses: summary.opportunities,
+                negotiationPriorities: summary.negotiation_priorities,
+                candidateRole: undefined, // Add if available
+                candidateLevel: undefined, // Add if available
+                context: undefined, // Add if available
+                dateGenerated: new Date(summary.created_at).toLocaleDateString(),
+              }}
+              clauses={clauses.map((clause) => ({
+                clause_type: clause.clause_type,
+                status: clause.clause_status,
+                rationale: clause.rationale,
+                recommendation: clause.recommendation,
+                excerpt: clause.contract_excerpt || '',
+                source_document: clause.source_document,
+                confidence: clause.confidence_score,
+              }))}
+              fileName="contract-analysis.pdf"
+            />
+          </div>
+        )}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Contract Analysis Summary</h1>
           <p className="text-gray-600">Personalized analysis of your employment offer</p>
