@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { notFound } from 'next/navigation';
 import ReviewerCommentSectionWrapper from './ReviewerCommentSectionWrapper';
 import EditablePrebrief from './EditablePrebrief';
+import DownloadPDFButton from '@/components/features/pdf/DownloadPDFButton';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -49,8 +50,42 @@ export default async function ReviewReportPage({ params }: { params: { summary_i
   const opportunities = safeParseArray(summary.opportunities);
   const negotiation_priorities = safeParseArray(summary.negotiation_priorities);
 
+  // Fetch clause analysis for the user
+  const { data: clausesData, error: clausesError } = await supabase
+    .from('review_results')
+    .select('*')
+    .eq('user_id', summary.user_id)
+    .order('created_at', { ascending: false });
+  const clauses = Array.isArray(clausesData) ? clausesData : [];
+
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-6">
+      {/* PDF Download Button */}
+      <div className="mb-4">
+        <DownloadPDFButton
+          summary={{
+            alignment: summary.alignment_rating,
+            recommendation: summary.recommendation,
+            strengths: strengths,
+            weaknesses: opportunities,
+            negotiationPriorities: negotiation_priorities,
+            candidateRole: undefined, // Add if available
+            candidateLevel: undefined, // Add if available
+            context: undefined, // Add if available
+            dateGenerated: new Date(summary.created_at).toLocaleDateString(),
+          }}
+          clauses={clauses.map((clause: any) => ({
+            clause_type: clause.clause_type,
+            status: clause.clause_status,
+            rationale: clause.rationale,
+            recommendation: clause.recommendation,
+            excerpt: clause.contract_excerpt || '',
+            source_document: clause.source_document,
+            confidence: clause.confidence_score,
+          }))}
+          fileName="contract-analysis.pdf"
+        />
+      </div>
       {/* Navigation */}
       <div>
         <a href="/reviewer/dashboard" className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium">Back to Dashboard</a>
