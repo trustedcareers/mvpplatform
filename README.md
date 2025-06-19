@@ -10,7 +10,7 @@ npm run dev
 
 Open [http://localhost:3001](http://localhost:3001) (or whatever port is shown in terminal) with your browser.
 
-**Current Status:** Core analysis system is functional with personalized contract analysis, clause-by-clause breakdown, and database storage working end-to-end.
+**Current Status:** Core analysis system is functional with personalized contract analysis, clause-by-clause breakdown, database storage, and PDF export working end-to-end.
 
 ---
 
@@ -60,8 +60,8 @@ This document maps the PRD into clear, scoped tasks with priorities, dependencie
 * **Logic:** Cursor handles prompts and routing ✅ **IMPLEMENTED**
 * **AI:** OpenAI GPT (for clause tagging, gap detection, rationale generation) ✅ **IMPLEMENTED**
 * **Backend:** Supabase (Auth, DB, Storage) ✅ **IMPLEMENTED**
-* **Reviewer Tooling:** Manual interface (Notion, Supabase dashboard, Airtable if needed) 🟡 **PARTIAL**
-* **PDF Generation:** Notion-based initially; move to HTML → PDF via Puppeteer or react-pdf ❌ **TODO**
+* **Reviewer Tooling:** Reviewer dashboard with comments and feedback system ✅ **IMPLEMENTED**
+* **PDF Generation:** Professional PDF export using @react-pdf/renderer ✅ **IMPLEMENTED**
 
 ---
 
@@ -104,13 +104,16 @@ Prompt templates and anonymization have been updated accordingly.
 * **MVP-FEAT-005:** Pre-Brief Generator (16h) ✅ **COMPLETED - Integrated into analysis**
   Create a summary that includes top flagged clauses, missing terms, and key issues for reviewers.
 
-* **MVP-FEAT-006:** Report Generation System (20h) ✅ **COMPLETED - Web view working**
-  Combine AI and human inputs into structured output. Render as web view or export to PDF.
+* **MVP-FEAT-006:** Report Generation System (20h) ✅ **COMPLETED**
+  Combine AI and human inputs into structured output. Render as web view and export to PDF.
 
-* **MVP-FEAT-007:** Reviewer Dashboard MVP (12h) ✅ **DONE**
-  Lightweight UI for reviewers to see assigned reviews, read pre-briefs, and add comments.
-  - Visit `/reviewer/dashboard` to access the dashboard.
-  - Click a review to see the pre-brief and add comments.
+* **MVP-FEAT-007:** Reviewer Dashboard MVP (12h) ✅ **COMPLETED**
+  Full-featured dashboard for reviewers with:
+  - Review list with status and metrics
+  - Pre-brief viewing and editing
+  - Comment system with coaching angles
+  - PDF export functionality
+  - Visit `/reviewer/dashboard` to access
 
 * **MVP-FEAT-008:** Personalization Logic for Report Prioritization (12h) ✅ **COMPLETED**
   Use intake data to reorder or highlight sections of the final report based on user goals.
@@ -174,16 +177,16 @@ Prompt templates and anonymization have been updated accordingly.
 - Personalized summary with "Should I take this?" recommendations
 - Database storage in both `review_results` and `review_summary` tables
 - Web-based report viewer with styled results
+- Professional PDF export with reviewer comments
+- Full reviewer dashboard with feedback system
 
 **🟡 NEXT PRIORITIES:**
 - Polish UI/UX for better user experience
-- Add PDF export functionality
 - Implement proper error handling and loading states
 - Mobile optimization
 - Data anonymization for privacy
 
 **❌ FUTURE ENHANCEMENTS:**
-- Reviewer dashboard for human oversight
 - Document retention policies
 - Comprehensive test suite
 - API documentation
@@ -276,5 +279,31 @@ See `VALIDATION_GUIDE.md` for detailed testing instructions.
 - To add more fields, update the dashboard and report page components.
 - If fields do not display, check RLS policies and data in Supabase.
 - Debug panels can be temporarily re-enabled in the dashboard for troubleshooting.
+
+---
+
+## 📄 PDF Export Feature
+
+The platform now supports professional PDF exports of contract analysis reports. Key features include:
+
+1. **Structured Layout:**
+   - Title and context information
+   - Overall assessment with alignment rating
+   - Strengths and weaknesses analysis
+   - Negotiation priorities
+   - Clause-by-clause breakdown
+   - Reviewer comments and coaching angles
+
+2. **Export Options:**
+   - Available from both user report and reviewer pages
+   - Includes all reviewer comments and feedback
+   - Professional styling with consistent branding
+   - Client-side generation for privacy
+
+3. **Technical Implementation:**
+   - Built with @react-pdf/renderer
+   - Client-side rendering for better performance
+   - Responsive to screen sizes
+   - Proper loading states and error handling
 
 ---
