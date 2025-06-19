@@ -31,9 +31,16 @@ export interface Clause {
   confidence?: number;
 }
 
+export interface ReviewerNote {
+  comment: string;
+  coaching_angle?: string;
+  created_at: string;
+}
+
 interface ContractAnalysisPDFProps {
   summary: SummaryProps;
   clauses: Clause[];
+  reviewerNotes?: ReviewerNote[];
 }
 
 const styles = StyleSheet.create({
@@ -135,7 +142,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const ContractAnalysisPDF: React.FC<ContractAnalysisPDFProps> = ({ summary, clauses }) => (
+export const ContractAnalysisPDF: React.FC<ContractAnalysisPDFProps> = ({ summary, clauses, reviewerNotes }) => (
   <Document>
     <Page size="A4" style={styles.page} wrap>
       {/* Header */}
@@ -220,6 +227,26 @@ export const ContractAnalysisPDF: React.FC<ContractAnalysisPDFProps> = ({ summar
           <Text>No clause analysis available.</Text>
         )}
       </View>
+
+      {/* Section 5: Reviewer Comments */}
+      {reviewerNotes && reviewerNotes.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>5. Reviewer Comments</Text>
+          {reviewerNotes.map((note, idx) => (
+            <View key={idx} style={{ marginBottom: 8 }}>
+              <Text style={styles.clauseRecommendation}>{note.comment}</Text>
+              {note.coaching_angle && (
+                <Text style={{ ...styles.clauseMeta, marginBottom: 2 }}>
+                  Coaching Angle: {note.coaching_angle}
+                </Text>
+              )}
+              <Text style={styles.clauseMeta}>
+                Added: {new Date(note.created_at).toLocaleString()}
+              </Text>
+            </View>
+          ))}
+        </View>
+      )}
 
       {/* Footer */}
       <View style={styles.footer} fixed>
