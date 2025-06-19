@@ -17,9 +17,13 @@ export function parseReviewResults(gptOutput: string) {
     // Handle new format with clauses and summary
     if (parsed.clauses && Array.isArray(parsed.clauses)) {
       console.log('[parseReviewResults] New format detected with clauses and summary');
+      if (parsed.prebrief) {
+        console.log('[parseReviewResults] Prebrief detected:', parsed.prebrief);
+      }
       return {
         clauses: parsed.clauses,
-        summary: parsed.summary || null
+        summary: parsed.summary || null,
+        prebrief: parsed.prebrief || null
       };
     }
     

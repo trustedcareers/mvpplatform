@@ -160,6 +160,13 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Reviewer Dashboard Link */}
+        <div className="mt-8 text-center">
+          <Link href="/reviewer/dashboard" className="inline-block bg-blue-700 text-white py-2 px-6 rounded-lg hover:bg-blue-800 font-medium mt-4">
+            Reviewer Dashboard
+          </Link>
+        </div>
+
         {/* Quick Stats */}
         <div className="mt-8 text-center text-sm text-gray-500">
           <p>User ID: {user.id}</p>

@@ -126,6 +126,7 @@ export async function analyzeContract(userId: string, supabaseClient?: SupabaseC
     });
     gptOutput = completion.choices[0]?.message?.content || "[]";
     console.log('[analyzeContract] OpenAI response received, length:', gptOutput.length);
+    console.log('[analyzeContract] Raw GPT output:', gptOutput);
   } catch (openaiError) {
     console.warn('[analyzeContract] OpenAI failed, using mock data:', openaiError);
     // Fallback mock data for testing

@@ -50,9 +50,10 @@ INSTRUCTIONS:
 5. Provide specific, actionable recommendations
 6. Include exact quotes or references from the contract when relevant
 
-Return a JSON object with two main sections:
+Return a JSON object with three main sections:
 
 {
+  "prebrief": "A 2-4 sentence executive summary of this contract, written in clear, long-form prose. This should provide a high-level overview of the offer, highlight the most important strengths and concerns, and set the context for a reviewer. Example: 'This offer provides a competitive base salary and strong equity package, but the severance terms are below industry standard. The non-compete clause is unusually restrictive and should be negotiated. Overall, the offer aligns with the candidate's goals, but several terms warrant further discussion.'",
   "clauses": [
     {
       "clause_type": "Base Salary",

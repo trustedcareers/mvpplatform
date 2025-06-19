@@ -124,21 +124,37 @@ export async function saveReviewResults(userId: string, analysisResult: any, sup
       console.log('[saveReviewResults] Successfully saved summary');
     }
 
+    // Save prebrief to review_prebrief table
+    if (analysisResult.prebrief) {
+      const prebriefInsert = {
+        user_id: userId,
+        summary: analysisResult.prebrief,
+        generated_at: new Date().toISOString(),
+      };
+      // Upsert: if a prebrief exists for this user, update it; otherwise, insert
+      const { error: prebriefError } = await supabase
+        .from('review_prebrief')
+        .upsert([prebriefInsert], { onConflict: 'user_id' });
+      if (prebriefError) {
+        console.error('[saveReviewResults] Error saving prebrief:', prebriefError);
+        throw prebriefError;
+      }
+      console.log('[saveReviewResults] Successfully saved prebrief');
+    }
+
     console.log('[saveReviewResults] All data saved successfully');
 
   } catch (error) {
     console.error('[saveReviewResults] Caught error:', error);
-    console.error('[saveReviewResults] Error type:', typeof error);
-    console.error('[saveReviewResults] Error constructor:', error?.constructor?.name);
-    console.error('[saveReviewResults] Error message:', error instanceof Error ? error.message : 'No message');
-    console.error('[saveReviewResults] Error stack:', error instanceof Error ? error.stack : 'No stack');
-    
-    // Try to serialize the error for better debugging
     try {
       console.error('[saveReviewResults] Error JSON:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
     } catch (jsonError) {
       console.error('[saveReviewResults] Could not serialize error to JSON:', jsonError);
     }
+    console.error('[saveReviewResults] Error type:', typeof error);
+    console.error('[saveReviewResults] Error constructor:', error?.constructor?.name);
+    console.error('[saveReviewResults] Error message:', error instanceof Error ? error.message : 'No message');
+    console.error('[saveReviewResults] Error stack:', error instanceof Error ? error.stack : 'No stack');
     
     // Create a proper error with context
     const contextualError = new Error(`Database save failed: ${error instanceof Error ? error.message : String(error)}`);

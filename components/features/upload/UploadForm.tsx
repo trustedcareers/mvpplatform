@@ -2,6 +2,10 @@
 import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
+import { Upload, File, X, Eye, Trash2, RefreshCw, CheckCircle, AlertCircle, Plus, FileText, Calendar, Tag } from 'lucide-react';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
 
 const FILE_TYPES = [
   { value: "offer", label: "Job Offer" },
@@ -89,8 +93,6 @@ export default function UploadForm() {
       setError("Failed to delete document");
     }
   };
-
-
 
   const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -230,17 +232,37 @@ export default function UploadForm() {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Upload Section */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Upload New Documents</h2>
-            
+          <Card className="p-6 mb-8">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* File Drop Zone */}
+              {/* Modern Drag-and-Drop Zone */}
               <div
-                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors"
-                onDrop={handleDrop}
+                className={`relative border-2 border-dashed rounded-xl transition-all duration-200 ease-in-out cursor-pointer ${
+                  files.length === 0 ? "border-gray-300 hover:border-gray-400 hover:bg-gray-50" : "border-blue-500 bg-blue-50 scale-[1.01]"
+                }`}
                 onDragOver={handleDragOver}
+                onDrop={handleDrop}
                 onClick={() => document.getElementById("file-input")?.click()}
               >
+                <div className="flex flex-col items-center justify-center py-12 px-6 text-center space-y-4">
+                  <div className={`rounded-full p-4 transition-colors ${files.length === 0 ? "bg-gray-100" : "bg-blue-100"}`}>
+                    <Upload className={`w-8 h-8 transition-colors ${files.length === 0 ? "text-gray-500" : "text-blue-600"}`} />
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-lg font-medium">
+                      {files.length === 0 ? "Drag files here" : `${files.length} file${files.length !== 1 ? "s" : ""} selected`}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      or <span className="text-blue-600 font-medium">click to browse</span>
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-400">
+                    <Badge variant="outline">PDF</Badge>
+                    <Badge variant="outline">DOC</Badge>
+                    <Badge variant="outline">DOCX</Badge>
+                    <Badge variant="outline">TXT</Badge>
+                    <span className="text-gray-400">• Max 10MB each</span>
+                  </div>
+                </div>
                 <input
                   id="file-input"
                   type="file"
@@ -249,30 +271,51 @@ export default function UploadForm() {
                   className="hidden"
                   onChange={handleFiles}
                 />
-                {files.length === 0 ? (
-                  <div>
-                    <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <p className="text-lg font-medium text-gray-900 mb-2">Drop files here or click to select</p>
-                    <p className="text-sm text-gray-500">Supports PDF, DOC, DOCX, TXT files</p>
-                  </div>
-                ) : (
-                  <div>
-                    <p className="text-lg font-medium text-gray-900 mb-2">
-                      {files.length} file{files.length > 1 ? 's' : ''} selected
-                    </p>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      {files.map((file) => (
-                        <li key={file.name} className="flex items-center justify-center">
-                          <span className="mr-2">📄</span>
-                          {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </div>
+
+              {/* File List */}
+              {files.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="font-medium text-sm text-gray-600">Uploaded Files ({files.length})</h3>
+                  <div className="space-y-2">
+                    {files.map((file, index) => (
+                      <Card key={index} className="p-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3 min-w-0 flex-1">
+                            <File className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium truncate">{file.name}</p>
+                              <p className="text-xs text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            onClick={e => {
+                              e.stopPropagation();
+                              setFiles(prev => prev.filter((_, i) => i !== index));
+                            }}
+                            className="flex-shrink-0 h-8 w-8 p-0"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                  <div className="flex gap-2 pt-2">
+                    <Button type="submit" className="flex-1" disabled={uploading}>
+                      Upload {files.length} file{files.length !== 1 ? "s" : ""}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setFiles([])}
+                    >
+                      Clear All
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               {/* File Type Selection */}
               <div>
@@ -304,24 +347,8 @@ export default function UploadForm() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
-
-              {/* Upload Button */}
-              <button 
-                type="submit" 
-                disabled={uploading || files.length === 0}
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-              >
-                {uploading ? (
-                  <span className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Uploading...
-                  </span>
-                ) : (
-                  `Upload ${files.length > 0 ? files.length + ' ' : ''}Document${files.length > 1 ? 's' : ''}`
-                )}
-              </button>
             </form>
-          </div>
+          </Card>
 
           {/* Existing Documents Section */}
           <div className="bg-white rounded-lg shadow-md p-6">

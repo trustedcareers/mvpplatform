@@ -1,6 +1,8 @@
 import * as React from "react";
 import { createClient } from '@supabase/supabase-js';
 import { notFound } from 'next/navigation';
+import ReviewerCommentSectionWrapper from './ReviewerCommentSectionWrapper';
+import EditablePrebrief from './EditablePrebrief';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -22,47 +24,75 @@ function safeParseArray(val: any) {
 }
 
 export default async function ReviewReportPage({ params }: { params: { summary_id: string } }) {
-  const { data, error } = await supabase
+  const awaitedParams = await params;
+  // Fetch review summary
+  const { data: summary, error } = await supabase
     .from('review_summary')
     .select('*')
-    .eq('id', params.summary_id)
+    .eq('id', awaitedParams.summary_id)
     .single();
 
-  if (error || !data) {
+  if (error || !summary) {
     return notFound();
   }
 
-  const strengths = safeParseArray(data.strengths);
-  const opportunities = safeParseArray(data.opportunities);
-  const negotiation_priorities = safeParseArray(data.negotiation_priorities);
+  // Fetch the most recent review_prebrief for the user
+  const { data: prebriefArr, error: prebriefError } = await supabase
+    .from('review_prebrief')
+    .select('*')
+    .eq('user_id', summary.user_id)
+    .order('generated_at', { ascending: false })
+    .limit(1);
+  const prebrief = Array.isArray(prebriefArr) && prebriefArr.length > 0 ? prebriefArr[0] : null;
+
+  const strengths = safeParseArray(summary.strengths);
+  const opportunities = safeParseArray(summary.opportunities);
+  const negotiation_priorities = safeParseArray(summary.negotiation_priorities);
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Review Report</h1>
-      <div className="mb-2"><b>Status:</b> {data.status}</div>
-      <div className="mb-2"><b>Alignment Rating:</b> {data.alignment_rating}</div>
-      <div className="mb-2"><b>Alignment Explanation:</b> {data.alignment_explanation}</div>
-      <div className="mb-2"><b>Confidence Score:</b> {data.confidence_score}</div>
-      <div className="mb-2"><b>Recommendation:</b> {data.recommendation}</div>
-      <div className="mb-2"><b>Negotiation Priorities:</b>
-        <ol style={{ listStyleType: 'decimal', marginLeft: '1.5rem' }}>
-          {Array.isArray(negotiation_priorities) && negotiation_priorities.map((n: string, i: number) => <li key={i}>{n}</li>)}
-        </ol>
+    <div className="p-6 max-w-2xl mx-auto space-y-6">
+      {/* Navigation */}
+      <div>
+        <a href="/reviewer/dashboard" className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium">Back to Dashboard</a>
       </div>
-      <div className="mb-2"><b>Strengths:</b>
-        <ul className="list-disc ml-6">
-          {Array.isArray(strengths) && strengths.map((s: string, i: number) => <li key={i}>{s}</li>)}
-        </ul>
+      {/* Header */}
+      <h1 className="text-2xl font-bold">Review Report</h1>
+      {/* Pre-Brief Section */}
+      {prebrief && <EditablePrebrief prebrief={prebrief} />}
+      {/* Review Details Section */}
+      <div className="p-4 bg-gray-50 border border-gray-200 rounded space-y-2">
+        <div><b>Status:</b> {summary.status}</div>
+        <div><b>Alignment Rating:</b> {summary.alignment_rating}</div>
+        <div><b>Alignment Explanation:</b> {summary.alignment_explanation}</div>
+        <div><b>Confidence Score:</b> {summary.confidence_score}</div>
+        <div><b>Recommendation:</b> {summary.recommendation}</div>
+        <div><b>Negotiation Priorities:</b>
+          <ol className="list-decimal ml-6">
+            {Array.isArray(negotiation_priorities) && negotiation_priorities.map((n: string, i: number) => <li key={i}>{n}</li>)}
+          </ol>
+        </div>
+        <div><b>Strengths:</b>
+          <ul className="list-disc ml-6">
+            {Array.isArray(strengths) && strengths.map((s: string, i: number) => <li key={i}>{s}</li>)}
+          </ul>
+        </div>
+        <div><b>Opportunities:</b>
+          <ul className="list-disc ml-6">
+            {Array.isArray(opportunities) && opportunities.map((o: string, i: number) => <li key={i}>{o}</li>)}
+          </ul>
+        </div>
+        <div className="text-xs text-gray-500">
+          <div>Created: {summary.created_at}</div>
+          <div>Updated: {summary.updated_at}</div>
+        </div>
       </div>
-      <div className="mb-2"><b>Opportunities:</b>
-        <ul className="list-disc ml-6">
-          {Array.isArray(opportunities) && opportunities.map((o: string, i: number) => <li key={i}>{o}</li>)}
-        </ul>
-      </div>
-      <div className="mb-2 text-xs text-gray-500">
-        <div>Created: {data.created_at}</div>
-        <div>Updated: {data.updated_at}</div>
-      </div>
+      {/* Reviewer Comments Section (moved to bottom) */}
+      {prebrief && (
+        <div className="p-4 bg-white border border-gray-200 rounded">
+          <h2 className="text-lg font-semibold mb-4">Reviewer Comments</h2>
+          <ReviewerCommentSectionWrapper prebriefId={prebrief.id} />
+        </div>
+      )}
     </div>
   );
 } 
