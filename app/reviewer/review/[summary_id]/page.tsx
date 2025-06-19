@@ -3,11 +3,16 @@ import { createClient } from '@supabase/supabase-js';
 import { notFound } from 'next/navigation';
 import ReviewerCommentSectionWrapper from './ReviewerCommentSectionWrapper';
 import EditablePrebrief from './EditablePrebrief';
-import DownloadPDFButton from '@/components/features/pdf/DownloadPDFButton';
+import dynamic from 'next/dynamic';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+const DownloadPDFButton = dynamic(
+  () => import('@/components/features/pdf/DownloadPDFButton'),
+  { ssr: false }
+);
 
 function safeParseArray(val: any) {
   try {
@@ -46,6 +51,13 @@ export default async function ReviewReportPage({ params }: { params: { summary_i
     .limit(1);
   const prebrief = Array.isArray(prebriefArr) && prebriefArr.length > 0 ? prebriefArr[0] : null;
 
+  // Fetch reviewer notes if we have a prebrief
+  const { data: reviewerNotes, error: notesError } = prebrief ? await supabase
+    .from('reviewer_notes')
+    .select('*')
+    .eq('review_prebrief_id', prebrief.id)
+    .order('created_at', { ascending: true }) : { data: null, error: null };
+
   const strengths = safeParseArray(summary.strengths);
   const opportunities = safeParseArray(summary.opportunities);
   const negotiation_priorities = safeParseArray(summary.negotiation_priorities);
@@ -82,6 +94,11 @@ export default async function ReviewReportPage({ params }: { params: { summary_i
             excerpt: clause.contract_excerpt || '',
             source_document: clause.source_document,
             confidence: clause.confidence_score,
+          }))}
+          reviewerNotes={reviewerNotes?.map((note: any) => ({
+            comment: note.comment,
+            coaching_angle: note.coaching_angle,
+            created_at: note.created_at,
           }))}
           fileName="contract-analysis.pdf"
         />

@@ -4,7 +4,12 @@ import { useUser } from '@supabase/auth-helpers-react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import DownloadPDFButton from "@/components/features/pdf/DownloadPDFButton";
+import dynamic from 'next/dynamic';
+
+const DownloadPDFButton = dynamic(
+  () => import('@/components/features/pdf/DownloadPDFButton'),
+  { ssr: false }
+);
 
 interface ReviewSummary {
   id: string;
