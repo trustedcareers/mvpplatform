@@ -3,16 +3,11 @@ import { createClient } from '@supabase/supabase-js';
 import { notFound } from 'next/navigation';
 import ReviewerCommentSectionWrapper from './ReviewerCommentSectionWrapper';
 import EditablePrebrief from './EditablePrebrief';
-import dynamic from 'next/dynamic';
+import PDFButtonWrapper from './PDFButtonWrapper';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-const DownloadPDFButton = dynamic(
-  () => import('@/components/features/pdf/DownloadPDFButton'),
-  { ssr: false }
-);
 
 function safeParseArray(val: any) {
   try {
@@ -73,36 +68,30 @@ export default async function ReviewReportPage({ params }: { params: { summary_i
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-6">
       {/* PDF Download Button */}
-      <div className="mb-4">
-        <DownloadPDFButton
-          summary={{
-            alignment: summary.alignment_rating,
-            recommendation: summary.recommendation,
-            strengths: strengths,
-            weaknesses: opportunities,
-            negotiationPriorities: negotiation_priorities,
-            candidateRole: undefined, // Add if available
-            candidateLevel: undefined, // Add if available
-            context: undefined, // Add if available
-            dateGenerated: new Date(summary.created_at).toLocaleDateString(),
-          }}
-          clauses={clauses.map((clause: any) => ({
-            clause_type: clause.clause_type,
-            status: clause.clause_status,
-            rationale: clause.rationale,
-            recommendation: clause.recommendation,
-            excerpt: clause.contract_excerpt || '',
-            source_document: clause.source_document,
-            confidence: clause.confidence_score,
-          }))}
-          reviewerNotes={reviewerNotes?.map((note: any) => ({
-            comment: note.comment,
-            coaching_angle: note.coaching_angle,
-            created_at: note.created_at,
-          }))}
-          fileName="contract-analysis.pdf"
-        />
-      </div>
+      <PDFButtonWrapper
+        summary={{
+          alignment: summary.alignment_rating,
+          recommendation: summary.recommendation,
+          strengths: strengths,
+          weaknesses: opportunities,
+          negotiationPriorities: negotiation_priorities,
+          dateGenerated: new Date().toLocaleDateString(),
+        }}
+        clauses={clauses.map((clause: any) => ({
+          clause_type: clause.clause_type,
+          status: clause.clause_status,
+          rationale: clause.rationale,
+          recommendation: clause.recommendation,
+          excerpt: clause.contract_excerpt || '',
+          source_document: clause.source_document,
+          confidence: clause.confidence_score,
+        }))}
+        reviewerNotes={reviewerNotes?.map((note: any) => ({
+          comment: note.comment,
+          coaching_angle: note.coaching_angle,
+          created_at: note.created_at,
+        }))}
+      />
       {/* Navigation */}
       <div>
         <a href="/reviewer/dashboard" className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium">Back to Dashboard</a>
