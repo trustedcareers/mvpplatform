@@ -5,33 +5,24 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import ContractAnalysisPDF, {
   SummaryProps,
   Clause,
+  ReviewerNote,
 } from "./ContractAnalysisPDF";
 
 interface DownloadPDFButtonProps {
   summary: SummaryProps;
   clauses: Clause[];
+  reviewerNotes?: ReviewerNote[];
   fileName?: string;
 }
 
-const DownloadPDFButton: React.FC<DownloadPDFButtonProps> = ({ summary, clauses, fileName = "contract-analysis.pdf" }) => {
+const DownloadPDFButton: React.FC<DownloadPDFButtonProps> = ({ summary, clauses, reviewerNotes, fileName = "contract-analysis.pdf" }) => {
   return (
     <PDFDownloadLink
-      document={<ContractAnalysisPDF summary={summary} clauses={clauses} />}
+      document={<ContractAnalysisPDF summary={summary} clauses={clauses} reviewerNotes={reviewerNotes} />}
       fileName={fileName}
-      style={{
-        display: "inline-block",
-        padding: "8px 16px",
-        backgroundColor: "#2563eb",
-        color: "#fff",
-        borderRadius: 4,
-        fontWeight: 600,
-        textDecoration: "none",
-        fontSize: 14,
-        border: "none",
-        cursor: "pointer",
-      }}
+      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium"
     >
-      {({ loading }) => (loading ? "Preparing PDF..." : "Download PDF")}
+      {({ loading }) => (loading ? 'Preparing PDF...' : 'Download PDF Report')}
     </PDFDownloadLink>
   );
 };
