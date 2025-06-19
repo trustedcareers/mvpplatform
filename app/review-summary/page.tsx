@@ -76,7 +76,16 @@ export default function ReviewSummaryPage() {
         throw clausesError;
       }
 
-      setSummary(summaryData);
+      const summary = Array.isArray(summaryData) && summaryData.length > 0 ? summaryData[0] : null;
+
+      // Fetch reviewer notes if we have a summary
+      const { data: reviewerNotes, error: notesError } = summary ? await supabase
+        .from('reviewer_notes')
+        .select('*')
+        .eq('review_prebrief_id', summary.review_prebrief_id)
+        .order('created_at', { ascending: true }) : { data: null, error: null };
+
+      setSummary(summary);
       setClauses(clausesData || []);
 
     } catch (err: any) {
@@ -178,6 +187,11 @@ export default function ReviewSummaryPage() {
                 source_document: clause.source_document,
                 confidence: clause.confidence_score,
               }))}
+              reviewerNotes={summary ? summary.reviewer_notes?.map((note: any) => ({
+                comment: note.comment,
+                coaching_angle: note.coaching_angle,
+                created_at: note.created_at,
+              })) : undefined}
               fileName="contract-analysis.pdf"
             />
           </div>
