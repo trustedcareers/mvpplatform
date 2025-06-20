@@ -20,6 +20,14 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Trusted",
   description: "Smart job offer review, powered by AI + expert insight",
+  icons: {
+    icon: [
+      { url: '/favicons/favicon.ico', sizes: 'any' },
+      { url: '/favicons/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/favicons/apple-touch-icon.png',
+  },
+  manifest: '/favicons/web-app-manifest-512x512.png',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

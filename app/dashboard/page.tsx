@@ -1,156 +1,93 @@
-'use client';
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { Upload, FileText, Clock, CheckCircle } from "lucide-react";
+import Logo from "@/components/Logo";
+import LogoutButton from "@/components/auth/LogoutButton";
 
-import { useEffect, useState } from 'react';
-import { useUser } from '@supabase/auth-helpers-react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import LogoutButton from '@/components/auth/LogoutButton';
-import { FileText, Clock, CheckCircle, Upload, Plus } from 'lucide-react';
+export const dynamic = 'force-dynamic';
 
-interface Document {
-  id: string;
-  filename: string;
-  uploaded_at: string;
-  status: 'Pending' | 'In Progress' | 'Complete' | 'Failed';
-}
+export default async function Dashboard() {
+  const supabase = createServerComponentClient({ cookies });
+  const { data: { session } } = await supabase.auth.getSession();
 
-export default function Dashboard() {
-  const user = useUser();
-  const router = useRouter();
-  const [documents, setDocuments] = useState<Document[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (user === null) {
-      router.push('/login');
-      return;
-    }
-    
-    if (user) {
-      fetchDocuments();
-    }
-  }, [user, router]);
-  
-  const fetchDocuments = async () => {
-    if (!user) return;
-    setLoading(true);
-    const supabase = createClientComponentClient();
-    const { data, error } = await supabase
-      .from('contract_documents')
-      .select('id, filename, uploaded_at, status')
-      .eq('user_id', user.id)
-      .order('uploaded_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching documents:', error);
-      // Handle error display
-    } else {
-      setDocuments(data as Document[]);
-    }
-    setLoading(false);
-  };
-
-  if (!user) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-gray-50">
-        <div>Loading...</div>
-      </div>
-    );
+  if (!session) {
+    redirect('/login');
   }
 
-  const getStatusIcon = (status: Document['status']) => {
-    switch (status) {
-      case 'Complete':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'In Progress':
-        return <Clock className="h-5 w-5 text-yellow-500" />;
-      default:
-        return <Clock className="h-5 w-5 text-gray-500" />;
-    }
-  };
+  const { data: documents, error } = await supabase
+    .from('contract_documents')
+    .select('id, document_name, created_at, status')
+    .order('created_at', { ascending: false });
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2 rounded-lg">
-               <FileText className="h-5 w-5" />
-            </div>
-            <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
-          </div>
-          <div className="flex items-center gap-4">
-             <p className="text-sm text-gray-500 hidden sm:block">
-              {user.email}
-            </p>
-            <LogoutButton />
-          </div>
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container flex h-16 items-center justify-between px-4 sm:px-8">
+          <Logo asLink />
+          <LogoutButton />
         </div>
       </header>
+      <main className="container mx-auto p-4 sm:p-6 lg:p-8">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 font-heading">Your Documents</h1>
+          <Link href="/upload" className="font-heading font-bold inline-flex items-center rounded-md bg-anchor px-3 py-2 text-sm text-white shadow-sm hover:bg-anchor-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-anchor-dark">
+            <Upload className="-ml-0.5 mr-1.5 h-5 w-5" />
+            Upload New Document
+          </Link>
+        </div>
 
-      <main>
-        <div className="mx-auto max-w-7xl py-8 sm:px-6 lg:px-8">
-          <div className="px-4 sm:px-0 mb-8 flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight text-gray-900">Your Documents</h2>
-              <p className="mt-1 text-gray-600">
-                Manage your uploaded documents and view their analysis status.
-              </p>
-            </div>
-            <Link href="/upload" className="inline-flex items-center gap-2 justify-center rounded-md text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-sm h-10 px-4 py-2">
-              <Plus className="h-4 w-4" />
-              Upload New
-            </Link>
-          </div>
-          
+        {documents && documents.length > 0 ? (
           <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-            <div className="divide-y divide-gray-200">
-              {loading ? (
-                <div className="p-12 text-center">Loading documents...</div>
-              ) : documents.length === 0 ? (
-                <div className="p-12 text-center">
-                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                  <h3 className="mt-2 text-sm font-medium text-gray-900">No documents uploaded</h3>
-                  <p className="mt-1 text-sm text-gray-500">Get started by uploading your first document.</p>
-                  <div className="mt-6">
-                     <Link href="/upload" className="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                       <Upload className="-ml-0.5 mr-1.5 h-5 w-5" />
-                      Upload Document
-                    </Link>
-                  </div>
-                </div>
-              ) : (
-                documents.map((doc) => (
-                  <Link href={`/review-summary/${doc.id}`} key={doc.id} className="block hover:bg-gray-50">
-                    <div className="px-4 py-4 sm:px-6">
+            <ul className="divide-y divide-gray-200">
+              {documents.map((doc) => (
+                <li key={doc.id}>
+                  <Link href={`/review-summary/${doc.id}`} className="block hover:bg-gray-50">
+                    <div className="p-4 sm:p-6">
                       <div className="flex items-center justify-between">
-                        <p className="truncate text-sm font-medium text-blue-600">{doc.filename}</p>
-                        <div className="ml-2 flex flex-shrink-0">
-                          <p className={`inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 ${
-                              doc.status === 'Complete' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                        <div className="flex items-center gap-3">
+                           <div className="p-3 bg-indigo-100 rounded-full">
+                             <FileText className="h-5 w-5 text-anchor" />
+                           </div>
+                           <div>
+                            <p className="truncate font-semibold text-anchor font-heading">{doc.document_name}</p>
+                            <p className="text-sm text-gray-500">Uploaded on {new Date(doc.created_at).toLocaleDateString()}</p>
+                           </div>
+                        </div>
+                        <div className="ml-2 flex flex-shrink-0 items-center gap-2">
+                          <p className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                              doc.status === 'Complete' ? 'bg-green-100 text-green-800' :
+                              doc.status === 'In Progress' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'
                             }`}>
                             {doc.status}
                           </p>
-                        </div>
-                      </div>
-                      <div className="mt-2 sm:flex sm:justify-between">
-                        <div className="sm:flex">
-                          <p className="flex items-center text-sm text-gray-500">
-                            {getStatusIcon(doc.status)}
-                            <span className="ml-1.5">
-                              Uploaded on {new Date(doc.uploaded_at).toLocaleDateString()}
-                            </span>
-                          </p>
+                           {doc.status === 'Complete' ? (
+                             <CheckCircle className="h-5 w-5 text-green-500" />
+                           ) : (
+                             <Clock className="h-5 w-5 text-yellow-500" />
+                           )}
                         </div>
                       </div>
                     </div>
                   </Link>
-                ))
-              )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="text-center py-20 bg-white rounded-lg shadow">
+            <Upload className="mx-auto h-12 w-12 text-gray-400" />
+            <h3 className="mt-2 text-lg font-semibold text-gray-900 font-heading">No documents uploaded</h3>
+            <p className="mt-1 text-sm text-gray-500 font-body">Get started by uploading your first document.</p>
+            <div className="mt-6">
+              <Link href="/upload" className="font-heading font-bold inline-flex items-center rounded-md bg-anchor px-3 py-2 text-sm text-white shadow-sm hover:bg-anchor-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-anchor-dark">
+                <Upload className="-ml-0.5 mr-1.5 h-5 w-5" />
+                Upload Document
+              </Link>
             </div>
           </div>
-        </div>
+        )}
       </main>
     </div>
   );

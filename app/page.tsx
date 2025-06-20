@@ -1,5 +1,6 @@
 import { ArrowRight, CheckCircle, FileText, Sparkles } from "lucide-react"
 import Link from "next/link"
+import Logo from "@/components/Logo"
 import HeroAnimation from "@/components/hero-animation"
 import ScrollFadeIn from "@/components/motion/ScrollFadeIn"
 
@@ -8,12 +9,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-hero-gradient font-body">
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container flex h-16 items-center px-4 sm:px-8">
-          <div className="font-heading font-bold text-xl flex items-center gap-2">
-            <div className="bg-anchor text-white p-2 rounded-lg shadow-lg">
-              <CheckCircle className="h-5 w-5" />
-            </div>
-            <span className="text-anchor">Trusted</span>
-          </div>
+          <Logo asLink />
           <div className="ml-auto flex items-center gap-4">
             <Link href="/login" className="font-heading inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900">
               Log in
@@ -190,14 +186,7 @@ export default function Home() {
       <footer className="border-t bg-white py-12">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2">
-              <div className="bg-anchor text-white p-2 rounded-lg">
-                <CheckCircle className="h-4 w-4" />
-              </div>
-              <span className="font-heading font-semibold text-anchor">
-                Trusted
-              </span>
-            </div>
+            <Logo />
             <div className="flex gap-6 text-sm text-gray-600">
               <a href="#" className="hover:text-anchor">
                 Privacy
