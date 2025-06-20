@@ -5,20 +5,20 @@ import ScrollFadeIn from "@/components/motion/ScrollFadeIn"
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 font-body">
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container flex h-16 items-center px-4 sm:px-8">
-          <div className="font-semibold text-xl flex items-center gap-2">
+          <div className="font-heading font-bold text-xl flex items-center gap-2">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2 rounded-lg shadow-lg">
               <CheckCircle className="h-5 w-5" />
             </div>
             <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Trusted</span>
           </div>
           <div className="ml-auto flex items-center gap-4">
-            <Link href="/login" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900">
+            <Link href="/login" className="font-heading inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900">
               Log in
             </Link>
-            <Link href="/login" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-white h-10 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg">
+            <Link href="/login" className="font-heading font-bold inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-white h-10 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg">
               Get Started
             </Link>
           </div>
@@ -33,11 +33,11 @@ export default function Home() {
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
               <div className="space-y-8">
                 <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
+                  <div className="font-heading inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
                     <Sparkles className="h-4 w-4" />
                     AI-Powered Contract Analysis
                   </div>
-                  <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
+                  <h1 className="font-heading text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
                     Make smarter job decisions with{" "}
                     <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                       AI-powered
@@ -52,12 +52,12 @@ export default function Home() {
                 <div className="flex flex-col gap-4 min-[400px]:flex-row">
                   <Link
                     href="/login"
-                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg text-lg px-8 py-6 h-auto"
+                    className="font-heading font-bold inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg text-lg px-8 py-6 h-auto"
                   >
                     Start Free Analysis
                     <ArrowRight className="h-5 w-5 ml-2" />
                   </Link>
-                  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground text-lg px-8 py-6 h-auto">
+                  <button className="font-heading font-bold inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm border border-input bg-background hover:bg-accent hover:text-accent-foreground text-lg px-8 py-6 h-auto">
                     Watch Demo
                   </button>
                 </div>
@@ -93,7 +93,7 @@ export default function Home() {
           <div className="container px-4 md:px-6">
             <ScrollFadeIn>
               <div className="text-center space-y-4 mb-16">
-                <h2 className="text-3xl font-bold sm:text-4xl">How it works</h2>
+                <h2 className="font-heading text-3xl font-bold sm:text-4xl">How it works</h2>
                 <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                   Our AI-powered platform analyzes your job offers and highlights potential issues in minutes
                 </p>
@@ -105,7 +105,7 @@ export default function Home() {
                   <div className="mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
                     <FileText className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">Upload your offer</h3>
+                  <h3 className="font-heading text-xl font-semibold mb-3">Upload your offer</h3>
                   <p className="text-gray-600 leading-relaxed">
                     Upload your job offer letter or contract and provide basic context about the role. We support PDF
                     files and keep your data secure.
@@ -117,7 +117,7 @@ export default function Home() {
                   <div className="mb-6 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
                     <Sparkles className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">Expert review</h3>
+                  <h3 className="font-heading text-xl font-semibold mb-3">Expert review</h3>
                   <p className="text-gray-600 leading-relaxed">
                     Our AI experts review the document, extract key clauses, and identify potential red flags using
                     advanced contract analysis.
@@ -129,7 +129,7 @@ export default function Home() {
                   <div className="mb-6 bg-gradient-to-r from-purple-600 to-violet-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
                     <CheckCircle className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">Get insights</h3>
+                  <h3 className="font-heading text-xl font-semibold mb-3">Get insights</h3>
                   <p className="text-gray-600 leading-relaxed">
                     Review a detailed report with explanations and recommendations for negotiation. Download or share
                     your analysis.
@@ -145,7 +145,7 @@ export default function Home() {
           <div className="container px-4 md:px-6">
             <ScrollFadeIn>
               <div className="text-center space-y-8">
-                <h2 className="text-3xl font-bold sm:text-4xl">Trusted by professionals everywhere</h2>
+                <h2 className="font-heading text-3xl font-bold sm:text-4xl">Trusted by professionals everywhere</h2>
                 <div className="grid gap-8 md:grid-cols-3 max-w-4xl mx-auto">
                   <div className="text-center">
                     <div className="text-4xl font-bold mb-2">10,000+</div>
@@ -170,13 +170,13 @@ export default function Home() {
           <div className="container px-4 md:px-6">
             <ScrollFadeIn>
               <div className="text-center space-y-8 max-w-3xl mx-auto">
-                <h2 className="text-3xl font-bold sm:text-4xl">Ready to analyze your contract?</h2>
+                <h2 className="font-heading text-3xl font-bold sm:text-4xl">Ready to analyze your contract?</h2>
                 <p className="text-xl text-gray-600">
                   Join thousands of professionals who've made smarter career decisions with Trusted
                 </p>
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg text-lg px-8 py-6 h-auto"
+                  className="font-heading font-bold inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg text-lg px-8 py-6 h-auto"
                 >
                   Get Started Free
                   <ArrowRight className="h-5 w-5 ml-2" />
@@ -194,7 +194,7 @@ export default function Home() {
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2 rounded-lg">
                 <CheckCircle className="h-4 w-4" />
               </div>
-              <span className="font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="font-heading font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Trusted
               </span>
             </div>
