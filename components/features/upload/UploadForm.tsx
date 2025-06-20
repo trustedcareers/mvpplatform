@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import { Upload, File, X, Eye, Trash2, RefreshCw, CheckCircle, AlertCircle, Plus, FileText, Calendar, Tag } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
 
 const FILE_TYPES = [
   { value: "offer", label: "Job Offer" },
@@ -232,7 +229,7 @@ export default function UploadForm() {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Upload Section */}
-          <Card className="p-6 mb-8">
+          <div className="p-6 mb-8 bg-white rounded-lg shadow">
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Modern Drag-and-Drop Zone */}
               <div
@@ -248,221 +245,159 @@ export default function UploadForm() {
                     <Upload className={`w-8 h-8 transition-colors ${files.length === 0 ? "text-gray-500" : "text-blue-600"}`} />
                   </div>
                   <div className="space-y-2">
-                    <p className="text-lg font-medium">
-                      {files.length === 0 ? "Drag files here" : `${files.length} file${files.length !== 1 ? "s" : ""} selected`}
+                    <p className="text-lg font-semibold text-gray-900">
+                      {files.length === 0 ? "Click to upload or drag and drop" : `${files.length} file(s) selected`}
                     </p>
-                    <p className="text-sm text-gray-500">
-                      or <span className="text-blue-600 font-medium">click to browse</span>
-                    </p>
+                    <p className="text-sm text-gray-500">Supports PDF, DOCX, and TXT files</p>
                   </div>
-                  <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-400">
-                    <Badge variant="outline">PDF</Badge>
-                    <Badge variant="outline">DOC</Badge>
-                    <Badge variant="outline">DOCX</Badge>
-                    <Badge variant="outline">TXT</Badge>
-                    <span className="text-gray-400">• Max 10MB each</span>
-                  </div>
+                  <input id="file-input" type="file" multiple onChange={handleFiles} className="hidden" />
                 </div>
-                <input
-                  id="file-input"
-                  type="file"
-                  multiple
-                  accept=".pdf,.doc,.docx,.txt"
-                  className="hidden"
-                  onChange={handleFiles}
-                />
               </div>
-
-              {/* File List */}
+              
+              {/* File Preview */}
               {files.length > 0 && (
                 <div className="space-y-3">
-                  <h3 className="font-medium text-sm text-gray-600">Uploaded Files ({files.length})</h3>
-                  <div className="space-y-2">
-                    {files.map((file, index) => (
-                      <Card key={index} className="p-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3 min-w-0 flex-1">
-                            <File className="w-5 h-5 text-blue-500 flex-shrink-0" />
-                            <div className="min-w-0 flex-1">
-                              <p className="text-sm font-medium truncate">{file.name}</p>
-                              <p className="text-xs text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                            </div>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            onClick={e => {
-                              e.stopPropagation();
-                              setFiles(prev => prev.filter((_, i) => i !== index));
-                            }}
-                            className="flex-shrink-0 h-8 w-8 p-0"
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </Card>
-                    ))}
-                  </div>
-                  <div className="flex gap-2 pt-2">
-                    <Button type="submit" className="flex-1" disabled={uploading}>
-                      Upload {files.length} file{files.length !== 1 ? "s" : ""}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setFiles([])}
-                    >
-                      Clear All
-                    </Button>
-                  </div>
+                  <h3 className="text-lg font-medium text-gray-900">Selected Files</h3>
+                  {files.map((file, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <File className="w-5 h-5 text-gray-500" />
+                        <span className="text-sm font-medium text-gray-700">{file.name}</span>
+                      </div>
+                      <button type="button" onClick={() => setFiles(files.filter((_, idx) => idx !== i))}>
+                        <X className="w-5 h-5 text-gray-400 hover:text-gray-600" />
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
 
-              {/* File Type Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Document Type *
-                </label>
+              {/* File Type Dropdown */}
+              <div className="space-y-2">
+                <label htmlFor="fileType" className="block text-sm font-medium text-gray-700">File Type*</label>
                 <select 
+                  id="fileType" 
                   value={fileType} 
-                  onChange={e => setFileType(e.target.value)} 
-                  required 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  onChange={(e) => setFileType(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="">Select document type...</option>
+                  <option value="">Select file type...</option>
                   {FILE_TYPES.map(type => (
                     <option key={type.value} value={type.value}>{type.label}</option>
                   ))}
                 </select>
               </div>
 
-              {/* Notes */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Notes (optional)
-                </label>
-                <input 
+              {/* Notes Textarea */}
+              <div className="space-y-2">
+                <label htmlFor="notes" className="block text-sm font-medium text-gray-700">Notes</label>
+                <textarea 
+                  id="notes" 
                   value={notes} 
-                  onChange={e => setNotes(e.target.value)} 
-                  placeholder="Add any additional context or notes..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  onChange={(e) => setNotes(e.target.value)}
+                  rows={3} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="e.g., 'Initial offer for Senior Developer role'"
                 />
               </div>
-            </form>
-          </Card>
 
-          {/* Existing Documents Section */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-gray-900">Your Documents</h2>
+              {/* Submit Button */}
               <button
-                onClick={fetchDocuments}
-                className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                type="submit"
+                disabled={uploading || files.length === 0}
+                className="w-full inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 hover:bg-blue-700 text-white disabled:bg-blue-300 h-10 px-4 py-2"
               >
-                Refresh
+                {uploading ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload
+                  </>
+                )}
               </button>
+            </form>
+          </div>
+          
+          {/* Uploaded Documents Section */}
+          <div className="bg-white rounded-lg shadow">
+            <div className="p-6 border-b">
+              <h2 className="text-xl font-semibold text-gray-900">Your Documents</h2>
             </div>
-
-            {loadingDocuments ? (
-              <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading documents...</p>
-              </div>
-            ) : documents.length > 0 ? (
-              <div className="space-y-4">
-                {documents.map((doc) => (
-                  <div key={doc.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center mb-2">
-                          <span className="text-lg mr-2">
-                            {doc.file_type === 'offer' ? '📋' : 
-                             doc.file_type === 'jd' ? '📝' : 
-                             doc.file_type === 'email' ? '📧' : '📄'}
-                          </span>
-                          <h3 className="font-medium text-gray-900">{doc.filename}</h3>
+            <div className="p-6">
+              {loadingDocuments ? (
+                <div className="flex justify-center items-center h-48">
+                  <RefreshCw className="w-6 h-6 text-gray-400 animate-spin" />
+                </div>
+              ) : documents.length === 0 ? (
+                <div className="text-center py-12">
+                  <FileText className="w-12 h-12 mx-auto text-gray-300" />
+                  <h3 className="mt-4 text-lg font-medium text-gray-900">No Documents Uploaded</h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Use the form to upload your first document for analysis.
+                  </p>
+                </div>
+              ) : (
+                <ul className="space-y-4">
+                  {documents.map((doc) => (
+                    <li key={doc.id} className="p-4 bg-gray-50 rounded-lg flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="bg-blue-100 p-3 rounded-full">
+                          <FileText className="w-5 h-5 text-blue-600" />
                         </div>
-                        <div className="text-sm text-gray-600 space-y-1">
-                          <p><span className="font-medium">Type:</span> {FILE_TYPES.find(t => t.value === doc.file_type)?.label || doc.file_type}</p>
-                          {doc.notes && <p><span className="font-medium">Notes:</span> {doc.notes}</p>}
-                          <p><span className="font-medium">Uploaded:</span> {new Date(doc.uploaded_at).toLocaleDateString()}</p>
+                        <div>
+                          <p className="font-semibold text-gray-900">{doc.filename}</p>
+                          <div className="flex items-center space-x-3 mt-1 text-sm text-gray-500">
+                             <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                              <Tag className="w-3 h-3 mr-1" />
+                              {FILE_TYPES.find(t => t.value === doc.file_type)?.label || "Other"}
+                            </span>
+                             <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                              <Calendar className="w-3 h-3 mr-1" />
+                              {new Date(doc.uploaded_at).toLocaleDateString()}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2 ml-4">
-                        <a
-                          href={doc.file_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                        >
-                          View
+                      <div className="flex items-center space-x-2">
+                        <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 text-gray-500 hover:text-gray-800">
+                          <Eye className="w-5 h-5" />
                         </a>
-                        <button
-                          onClick={() => setDeleteConfirm(doc.id)}
-                          className="text-red-600 hover:text-red-800 text-sm font-medium"
-                        >
-                          Delete
-                        </button>
+                        
+                        {deleteConfirm === doc.id ? (
+                          <>
+                            <button
+                              onClick={() => deleteDocument(doc.id, doc.filename, doc.file_url)}
+                              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-red-600 text-white hover:bg-red-700 h-10 px-3"
+                            >
+                              <CheckCircle className="w-4 h-4 mr-2" />
+                              Confirm
+                            </button>
+                            <button
+                              onClick={() => setDeleteConfirm(null)}
+                              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-3"
+                            >
+                              <X className="w-4 h-4 mr-2" />
+                              Cancel
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={() => setDeleteConfirm(doc.id)}
+                            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 text-gray-500 hover:text-red-600"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        )}
                       </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-500 mb-4">No documents uploaded yet</p>
-                <p className="text-sm text-gray-400">Upload your first document to get started with AI analysis</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Delete Confirmation Modal */}
-        {deleteConfirm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Confirm Deletion</h3>
-              <p className="text-gray-600 mb-6">
-                Are you sure you want to delete this document? This action cannot be undone.
-              </p>
-              <div className="flex justify-end space-x-4">
-                <button
-                  onClick={() => setDeleteConfirm(null)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    const doc = documents.find(d => d.id === deleteConfirm);
-                    if (doc) {
-                      deleteDocument(doc.id, doc.filename, doc.file_url);
-                    }
-                  }}
-                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                >
-                  Delete
-                </button>
-              </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-          </div>
-        )}
-
-        {/* Navigation */}
-        <div className="mt-8 text-center">
-          <p className="text-gray-600 mb-4">Ready to analyze your documents?</p>
-          <div className="space-x-4">
-            <a
-              href="/debug/analyze"
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 font-medium"
-            >
-              Run Analysis
-            </a>
-            <a
-              href="/"
-              className="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 font-medium"
-            >
-              Back to Home
-            </a>
           </div>
         </div>
       </div>

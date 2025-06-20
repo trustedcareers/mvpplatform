@@ -1,177 +1,232 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useUser } from '@supabase/auth-helpers-react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { ArrowRight, CheckCircle, FileText, Sparkles } from "lucide-react"
+import Link from "next/link"
+import HeroAnimation from "@/components/hero-animation"
+import ScrollFadeIn from "@/components/motion/ScrollFadeIn"
 
 export default function Home() {
-  const user = useUser();
-  const router = useRouter();
-
-  // Handle redirects in useEffect to avoid render-time state updates
-  useEffect(() => {
-    if (user === null) {
-      router.push('/login');
-    }
-  }, [user, router]);
-
-  // If not logged in, show loading while redirecting
-  if (user === null) {
-    return <div className="p-6">Redirecting to login...</div>;
-  }
-
-  // Still loading user
-  if (user === undefined) {
-    return <div className="p-6">Loading...</div>;
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Contract Analysis App
-          </h1>
-          <p className="text-xl text-gray-600 mb-2">
-            AI-powered contract review for job offers
-          </p>
-          <p className="text-sm text-gray-500">
-            Welcome back, {user.email}
-          </p>
-        </div>
-
-        {/* Main Features Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {/* Step 1: Intake */}
-          <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
-            <div className="text-center mb-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-blue-600 font-bold text-xl">1</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900">Setup Profile</h3>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container flex h-16 items-center px-4 sm:px-8">
+          <div className="font-semibold text-xl flex items-center gap-2">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2 rounded-lg shadow-lg">
+              <CheckCircle className="h-5 w-5" />
             </div>
-            <p className="text-gray-600 mb-4 text-center">
-              Tell us about your role, experience level, and priorities to get personalized contract analysis.
-            </p>
-            <Link 
-              href="/intake"
-              className="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Complete Profile
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Trusted</span>
+          </div>
+          <div className="ml-auto flex items-center gap-4">
+            <Link href="/login" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-gray-600 hover:text-gray-900">
+              Log in
+            </Link>
+            <Link href="/login" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg">
+              Get Started
             </Link>
           </div>
+        </div>
+      </header>
 
-          {/* Step 2: Upload */}
-          <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
-            <div className="text-center mb-4">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-green-600 font-bold text-xl">2</span>
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="py-20 md:py-32 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-indigo-600/5"></div>
+          <div className="container px-4 md:px-6 relative">
+            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
+                    <Sparkles className="h-4 w-4" />
+                    AI-Powered Contract Analysis
+                  </div>
+                  <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
+                    Make smarter job decisions with{" "}
+                    <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                      AI-powered
+                    </span>{" "}
+                    contract reviews
+                  </h1>
+                  <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
+                    Trusted helps professionals analyze offer letters, extract key insights, and identify red flags
+                    before you sign. Get expert-level contract review in minutes, not days.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-4 min-[400px]:flex-row">
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg text-lg py-6 h-auto"
+                  >
+                    Start Free Analysis
+                    <ArrowRight className="h-5 w-5 ml-2" />
+                  </Link>
+                  <button
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8 text-lg py-6 h-auto border-2"
+                  >
+                    Watch Demo
+                  </button>
+                </div>
+                <div className="flex items-center gap-6 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    Free to start
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    5-minute analysis
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    Expert insights
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Upload Documents</h3>
-            </div>
-            <p className="text-gray-600 mb-4 text-center">
-              Upload your contract documents, offer letters, or job descriptions for analysis.
-            </p>
-            <Link 
-              href="/upload"
-              className="block w-full bg-green-600 text-white text-center py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
-            >
-              Upload Files
-            </Link>
-          </div>
-
-          {/* Step 3: Analyze */}
-          <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
-            <div className="text-center mb-4">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-purple-600 font-bold text-xl">3</span>
+              <div className="mx-auto lg:ml-auto flex justify-center">
+                <div className="relative">
+                  <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 rounded-2xl blur-xl"></div>
+                  <div className="relative">
+                    <HeroAnimation />
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Get Analysis</h3>
             </div>
-            <p className="text-gray-600 mb-4 text-center">
-              Receive AI-powered insights and recommendations tailored to your career goals.
-            </p>
-            <Link 
-              href="/debug/analyze"
-              className="block w-full bg-purple-600 text-white text-center py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              Run Analysis
-            </Link>
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section className="py-20 bg-white relative">
+          <div className="container px-4 md:px-6">
+            <ScrollFadeIn>
+              <div className="text-center space-y-4 mb-16">
+                <h2 className="text-3xl font-bold sm:text-4xl">How it works</h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                  Our AI-powered platform analyzes your job offers and highlights potential issues in minutes
+                </p>
+              </div>
+            </ScrollFadeIn>
+            <div className="grid gap-8 md:grid-cols-3">
+              <ScrollFadeIn delay={0.1}>
+                <div className="rounded-lg border bg-card text-card-foreground shadow-sm group relative bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
+                  <div className="flex flex-col space-y-1.5 p-6">
+                    <div className="mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
+                      <FileText className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-semibold leading-none tracking-tight">Upload your offer</h3>
+                  </div>
+                  <div className="p-6 pt-0">
+                    <p className="text-gray-600 leading-relaxed">
+                      Upload your job offer letter or contract and provide basic context about the role. We support PDF
+                      files and keep your data secure.
+                    </p>
+                  </div>
+                </div>
+              </ScrollFadeIn>
+              <ScrollFadeIn delay={0.2}>
+                <div className="rounded-lg border bg-card text-card-foreground shadow-sm group relative bg-gradient-to-br from-green-50 to-emerald-50 border-green-100 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
+                  <div className="flex flex-col space-y-1.5 p-6">
+                    <div className="mb-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
+                      <Sparkles className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-semibold leading-none tracking-tight">Expert review</h3>
+                  </div>
+                  <div className="p-6 pt-0">
+                    <p className="text-gray-600 leading-relaxed">
+                      Our AI experts review the document, extract key clauses, and identify potential red flags using
+                      advanced contract analysis.
+                    </p>
+                  </div>
+                </div>
+              </ScrollFadeIn>
+              <ScrollFadeIn delay={0.3}>
+                <div className="rounded-lg border bg-card text-card-foreground shadow-sm group relative bg-gradient-to-br from-purple-50 to-violet-50 border-purple-100 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
+                  <div className="flex flex-col space-y-1.5 p-6">
+                    <div className="mb-4 bg-gradient-to-r from-purple-600 to-violet-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
+                      <CheckCircle className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-semibold leading-none tracking-tight">Get insights</h3>
+                  </div>
+                  <div className="p-6 pt-0">
+                    <p className="text-gray-600 leading-relaxed">
+                      Review a detailed report with explanations and recommendations for negotiation. Download or share
+                      your analysis.
+                    </p>
+                  </div>
+                </div>
+              </ScrollFadeIn>
+            </div>
+          </div>
+        </section>
+
+        {/* Social Proof */}
+        <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+          <div className="container px-4 md:px-6">
+            <ScrollFadeIn>
+              <div className="text-center space-y-8">
+                <h2 className="text-3xl font-bold sm:text-4xl">Trusted by professionals everywhere</h2>
+                <div className="grid gap-8 md:grid-cols-3 max-w-4xl mx-auto">
+                  <div className="text-center">
+                    <div className="text-4xl font-bold mb-2">10,000+</div>
+                    <div className="text-blue-100">Contracts analyzed</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl font-bold mb-2">$2.5M+</div>
+                    <div className="text-blue-100">Additional compensation negotiated</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl font-bold mb-2">98%</div>
+                    <div className="text-blue-100">User satisfaction rate</div>
+                  </div>
+                </div>
+              </div>
+            </ScrollFadeIn>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="container px-4 md:px-6">
+            <ScrollFadeIn>
+              <div className="text-center space-y-8 max-w-3xl mx-auto">
+                <h2 className="text-3xl font-bold sm:text-4xl">Ready to analyze your contract?</h2>
+                <p className="text-xl text-gray-600">
+                  Join thousands of professionals who've made smarter career decisions with Trusted
+                </p>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg text-lg py-6 h-auto"
+                >
+                  Get Started Free
+                  <ArrowRight className="h-5 w-5 ml-2" />
+                </Link>
+              </div>
+            </ScrollFadeIn>
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t bg-white py-12">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2 rounded-lg">
+                <CheckCircle className="h-4 w-4" />
+              </div>
+              <span className="font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Trusted
+              </span>
+            </div>
+            <div className="flex gap-6 text-sm text-gray-600">
+              <a href="#" className="hover:text-gray-900">
+                Privacy
+              </a>
+              <a href="#" className="hover:text-gray-900">
+                Terms
+              </a>
+              <a href="#" className="hover:text-gray-900">
+                Support
+              </a>
+            </div>
+            <p className="text-sm text-gray-500">© 2025 Trusted. All rights reserved.</p>
           </div>
         </div>
-
-        {/* Results Section */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">View Your Results</h3>
-          <div className="text-center">
-            <p className="text-gray-600 mb-4">
-              Already completed your analysis? View your personalized contract summary and recommendations.
-            </p>
-            <Link 
-              href="/review-summary"
-              className="inline-block bg-indigo-600 text-white py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors font-medium"
-            >
-              View Analysis Summary
-            </Link>
-          </div>
-        </div>
-
-        {/* Debug Section */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Debug & Testing</h3>
-          <div className="grid md:grid-cols-5 gap-4">
-            <Link 
-              href="/debug/database"
-              className="text-center p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-            >
-              <div className="font-medium text-blue-900">Database Status</div>
-              <div className="text-sm text-blue-600">Check table setup</div>
-            </Link>
-            <Link 
-              href="/debug/session"
-              className="text-center p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
-            >
-              <div className="font-medium text-green-900">Session Debug</div>
-              <div className="text-sm text-green-600">Login persistence</div>
-            </Link>
-            <Link 
-              href="/debug/intake"
-              className="text-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <div className="font-medium text-gray-900">Profile Debug</div>
-              <div className="text-sm text-gray-600">View saved profile data</div>
-            </Link>
-            <Link 
-              href="/debug/upload"
-              className="text-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <div className="font-medium text-gray-900">Upload Debug</div>
-              <div className="text-sm text-gray-600">View uploaded files</div>
-            </Link>
-            <Link 
-              href="/debug/analyze"
-              className="text-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <div className="font-medium text-gray-900">Analysis Debug</div>
-              <div className="text-sm text-gray-600">Run contract analysis</div>
-            </Link>
-          </div>
-        </div>
-
-        {/* Reviewer Dashboard Link */}
-        <div className="mt-8 text-center">
-          <Link href="/reviewer/dashboard" className="inline-block bg-blue-700 text-white py-2 px-6 rounded-lg hover:bg-blue-800 font-medium mt-4">
-            Reviewer Dashboard
-          </Link>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="mt-8 text-center text-sm text-gray-500">
-          <p>User ID: {user.id}</p>
-        </div>
-      </div>
+      </footer>
     </div>
-  );
-}
+  )
+} 

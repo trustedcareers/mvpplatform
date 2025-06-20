@@ -3,7 +3,6 @@
 import { useUser } from '@supabase/auth-helpers-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { Header } from '../ui/Header';
 
 const PUBLIC_PATHS = ['/login', '/auth/callback'];
 
@@ -18,7 +17,7 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   useEffect(() => {
     // Don't redirect on public paths
-    if (PUBLIC_PATHS.includes(pathname)) {
+    if (pathname && PUBLIC_PATHS.includes(pathname)) {
       return;
     }
 
@@ -40,12 +39,8 @@ export function AppLayout({ children }: AppLayoutProps) {
     );
   }
 
-  // Don't show header on public paths
-  const showHeader = !PUBLIC_PATHS.includes(pathname);
-
   return (
     <div className="min-h-screen flex flex-col">
-      {showHeader && <Header />}
       <main className="flex-1">
         {children}
       </main>

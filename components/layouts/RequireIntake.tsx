@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserContext } from '@/lib/hooks/useUserContext';
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 
 interface RequireIntakeProps {
@@ -28,13 +26,13 @@ export function RequireIntake({ children }: RequireIntakeProps) {
     return (
       <div className="min-h-screen bg-background py-8">
         <div className="container max-w-2xl">
-          <Alert variant="destructive">
+          <div className="relative w-full rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>
+            <h5 className="mb-1 font-medium leading-none tracking-tight">Error</h5>
+            <div className="text-sm">
               {error}
-            </AlertDescription>
-          </Alert>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -44,17 +42,20 @@ export function RequireIntake({ children }: RequireIntakeProps) {
     return (
       <div className="min-h-screen bg-background py-8">
         <div className="container max-w-2xl">
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Profile Required</AlertTitle>
-            <AlertDescription className="mt-2">
+          <div className="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7">
+            <AlertCircle className="absolute left-4 top-4 h-4 w-4" />
+            <h5 className="mb-1 font-medium leading-none tracking-tight">Profile Required</h5>
+            <div className="text-sm [&_p]:leading-relaxed mt-2">
               Please complete your profile before proceeding. This helps us provide personalized analysis of your contract.
-            </AlertDescription>
-          </Alert>
+            </div>
+          </div>
           <div className="mt-6 flex justify-center">
-            <Button onClick={() => router.push('/intake')}>
+            <button
+              onClick={() => router.push('/intake')}
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+            >
               Complete Profile
-            </Button>
+            </button>
           </div>
         </div>
       </div>
