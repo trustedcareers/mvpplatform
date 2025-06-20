@@ -1,133 +1,231 @@
-'use client';
+"use client"
 
-import { useState, useEffect } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useRouter } from 'next/navigation';
-import { useUser } from '@supabase/auth-helpers-react';
+import type React from "react"
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+
+import Logo from "@/components/Logo"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Terminal } from "lucide-react"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const user = useUser();
+  const supabase = createClientComponentClient()
+  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState("")
+  const [error, setError] = useState("")
 
-  // If user is already logged in, redirect to home
   useEffect(() => {
-    if (user) {
-      router.push('/dashboard');
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        router.push("/dashboard")
+      }
     }
-  }, [user, router]);
+    checkUser()
+  }, [router, supabase])
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage(null);
-    
-    const supabase = createClientComponentClient();
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError("")
+    setMessage("")
 
-    const redirectUrl = `${window.location.origin}/auth/callback`;
-    
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (error) {
+      setError(error.message)
+    } else {
+      setMessage("Successfully signed in! Redirecting...")
+      router.push("/dashboard")
+    }
+    setLoading(false)
+  }
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError("")
+    setMessage("")
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+       options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+
+    if (error) {
+      setError(error.message)
+    } else {
+      setMessage("Account created! Please check your email to verify.")
+    }
+    setLoading(false)
+  }
+
+  const handleMagicLink = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError("")
+    setMessage("")
+
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: redirectUrl,
-        // This helps with session persistence
-        shouldCreateUser: true,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
-    });
-
-    setLoading(false);
+    })
 
     if (error) {
-      setMessage('Error: ' + error.message);
+      setError(error.message)
     } else {
-      setMessage('✅ Check your email for the magic login link! The link will keep you logged in.');
+      setMessage("Magic link sent! Check your email to log in.")
     }
-  };
-
-  // Show loading if we're checking authentication
-  if (user === undefined) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Checking authentication...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't show login form if user is already authenticated
-  if (user) {
-    return null;
+    setLoading(false)
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-          <p className="text-gray-600">Sign in to your contract analysis account</p>
+          <Link href="/">
+            <Logo variant="horizontal" size="xl" className="mx-auto" />
+          </Link>
+          <h2 className="mt-6 text-3xl font-bold text-gray-900 font-heading">Welcome to Trusted</h2>
+          <p className="mt-2 text-sm text-gray-600 font-body">Sign in to your account or create a new one</p>
         </div>
-        
-        <div className="bg-white py-8 px-6 shadow-md rounded-lg">
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
-              <input
-                id="email"
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
 
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <span className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Sending...
-                </span>
-              ) : (
-                'Send Magic Link'
-              )}
-            </button>
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="font-heading">Authentication</CardTitle>
+            <CardDescription className="font-body">Choose your preferred sign-in method</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="signin" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="signin">Sign In</TabsTrigger>
+                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="signin">
+                <form onSubmit={handleSignIn} className="space-y-4 pt-4">
+                  <div className="space-y-1">
+                    <Label htmlFor="signin-email">Email</Label>
+                    <Input
+                      id="signin-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="demo@example.com"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="signin-password">Password</Label>
+                    <Input
+                      id="signin-password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      placeholder="password123"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full font-heading font-bold bg-anchor hover:bg-anchor-light" disabled={loading}>
+                    {loading ? "Signing in..." : "Sign In"}
+                  </Button>
+                </form>
+              </TabsContent>
+
+              <TabsContent value="signup">
+                <form onSubmit={handleSignUp} className="space-y-4 pt-4">
+                  <div className="space-y-1">
+                    <Label htmlFor="signup-email">Email</Label>
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="demo@example.com"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="signup-password">Password</Label>
+                    <Input
+                      id="signup-password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      placeholder="password123"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full font-heading font-bold bg-anchor hover:bg-anchor-light" disabled={loading}>
+                    {loading ? "Creating account..." : "Sign Up"}
+                  </Button>
+                </form>
+              </TabsContent>
+              
+              <TabsContent value="magic-link">
+                <form onSubmit={handleMagicLink} className="space-y-4 pt-4">
+                  <div className="space-y-1">
+                    <Label htmlFor="magic-email">Email</Label>
+                    <Input
+                      id="magic-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="demo@example.com"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full font-heading font-bold bg-anchor hover:bg-anchor-light" disabled={loading}>
+                    {loading ? "Sending..." : "Send Magic Link"}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
 
             {message && (
-              <div className={`text-sm text-center p-3 rounded-md ${
-                message.includes('Error') 
-                  ? 'bg-red-50 text-red-700 border border-red-200' 
-                  : 'bg-green-50 text-green-700 border border-green-200'
-              }`}>
-                {message}
-              </div>
+              <Alert className="mt-4 border-green-200 bg-green-50 text-green-700">
+                <Terminal className="h-4 w-4" />
+                <AlertTitle>Heads up!</AlertTitle>
+                <AlertDescription>{message}</AlertDescription>
+              </Alert>
             )}
-          </form>
 
-          <div className="mt-6 text-center">
-            <div className="bg-blue-50 p-4 rounded-md">
-              <h3 className="text-sm font-medium text-blue-900 mb-2">🔒 Secure & Persistent Login</h3>
-              <p className="text-xs text-blue-700">
-                Your login session will persist across browser restarts. You'll only need to use the magic link once per device.
-              </p>
-            </div>
+            {error && (
+              <Alert variant="destructive" className="mt-4">
+                <Terminal className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+         <div className="text-center">
+          <div className="mt-4 p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+            <p className="text-sm text-anchor font-body">
+              <strong>Demo Mode:</strong> Use any email and a password of at least 6 characters to try the application.
+            </p>
           </div>
-        </div>
-        
-        <div className="text-center text-sm text-gray-500">
-          <p>New to contract analysis? The magic link will create your account automatically.</p>
         </div>
       </div>
     </div>
-  );
+  )
 }
