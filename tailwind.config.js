@@ -22,6 +22,12 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        anchor: {
+          DEFAULT: '#2e2a72',      // primary brand anchor
+          light: '#4f4aa0',        // hover or lighter accent
+          dark: '#1f1b4e',         // darker hover/focus variant
+          fg: '#ffffff',           // foreground on anchor
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -69,6 +75,9 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backgroundImage: {
+        'hero-gradient': 'linear-gradient(to bottom right, #e0e7ff, #f0f4ff)', // refined background
       },
       fontFamily: {
         heading: ['var(--font-lato)', 'sans-serif'],
