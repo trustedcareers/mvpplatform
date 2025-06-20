@@ -16,7 +16,7 @@ const sizeMap: Record<LogoSize, { width: number; height: number }> = {
   md: { width: 40, height: 40 },
   lg: { width: 120, height: 32 },
   xl: { width: 150, height: 40 },
-  2xl: { width: 200, height: 50 },
+  '2xl': { width: 200, height: 50 },
 };
 
 const variantMap: Record<LogoVariant, { src: string, alt: string, defaultSize: LogoSize }> = {
