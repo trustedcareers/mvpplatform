@@ -1,181 +1,157 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useUser } from '@supabase/auth-helpers-react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import LogoutButton from '@/components/auth/LogoutButton';
+import { FileText, Clock, CheckCircle, Upload, Plus } from 'lucide-react';
 
-export default function Home() {
+interface Document {
+  id: string;
+  filename: string;
+  uploaded_at: string;
+  status: 'Pending' | 'In Progress' | 'Complete' | 'Failed';
+}
+
+export default function Dashboard() {
   const user = useUser();
   const router = useRouter();
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Handle redirects in useEffect to avoid render-time state updates
   useEffect(() => {
     if (user === null) {
       router.push('/login');
+      return;
+    }
+    
+    if (user) {
+      fetchDocuments();
     }
   }, [user, router]);
+  
+  const fetchDocuments = async () => {
+    if (!user) return;
+    setLoading(true);
+    const supabase = createClientComponentClient();
+    const { data, error } = await supabase
+      .from('contract_documents')
+      .select('id, filename, uploaded_at, status')
+      .eq('user_id', user.id)
+      .order('uploaded_at', { ascending: false });
 
-  // If not logged in, show loading while redirecting
-  if (user === null) {
-    return <div className="p-6">Redirecting to login...</div>;
+    if (error) {
+      console.error('Error fetching documents:', error);
+      // Handle error display
+    } else {
+      setDocuments(data as Document[]);
+    }
+    setLoading(false);
+  };
+
+  if (!user) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-50">
+        <div>Loading...</div>
+      </div>
+    );
   }
 
-  // Still loading user
-  if (user === undefined) {
-    return <div className="p-6">Loading...</div>;
-  }
+  const getStatusIcon = (status: Document['status']) => {
+    switch (status) {
+      case 'Complete':
+        return <CheckCircle className="h-5 w-5 text-green-500" />;
+      case 'In Progress':
+        return <Clock className="h-5 w-5 text-yellow-500" />;
+      default:
+        return <Clock className="h-5 w-5 text-gray-500" />;
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Contract Analysis App
-          </h1>
-          <p className="text-xl text-gray-600 mb-2">
-            AI-powered contract review for job offers
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-4">
-            <p className="text-sm text-gray-500">
-              Welcome back, {user.email}
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow-sm">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2 rounded-lg">
+               <FileText className="h-5 w-5" />
+            </div>
+            <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
+          </div>
+          <div className="flex items-center gap-4">
+             <p className="text-sm text-gray-500 hidden sm:block">
+              {user.email}
             </p>
             <LogoutButton />
           </div>
         </div>
+      </header>
 
-        {/* Main Features Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {/* Step 1: Intake */}
-          <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
-            <div className="text-center mb-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-blue-600 font-bold text-xl">1</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900">Setup Profile</h3>
+      <main>
+        <div className="mx-auto max-w-7xl py-8 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-0 mb-8 flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-gray-900">Your Documents</h2>
+              <p className="mt-1 text-gray-600">
+                Manage your uploaded documents and view their analysis status.
+              </p>
             </div>
-            <p className="text-gray-600 mb-4 text-center">
-              Tell us about your role, experience level, and priorities to get personalized contract analysis.
-            </p>
-            <Link 
-              href="/intake"
-              className="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Complete Profile
+            <Link href="/upload" className="inline-flex items-center gap-2 justify-center rounded-md text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-sm h-10 px-4 py-2">
+              <Plus className="h-4 w-4" />
+              Upload New
             </Link>
           </div>
-
-          {/* Step 2: Upload */}
-          <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
-            <div className="text-center mb-4">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-green-600 font-bold text-xl">2</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900">Upload Documents</h3>
+          
+          <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+            <div className="divide-y divide-gray-200">
+              {loading ? (
+                <div className="p-12 text-center">Loading documents...</div>
+              ) : documents.length === 0 ? (
+                <div className="p-12 text-center">
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <h3 className="mt-2 text-sm font-medium text-gray-900">No documents uploaded</h3>
+                  <p className="mt-1 text-sm text-gray-500">Get started by uploading your first document.</p>
+                  <div className="mt-6">
+                     <Link href="/upload" className="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                       <Upload className="-ml-0.5 mr-1.5 h-5 w-5" />
+                      Upload Document
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                documents.map((doc) => (
+                  <Link href={`/review-summary/${doc.id}`} key={doc.id} className="block hover:bg-gray-50">
+                    <div className="px-4 py-4 sm:px-6">
+                      <div className="flex items-center justify-between">
+                        <p className="truncate text-sm font-medium text-blue-600">{doc.filename}</p>
+                        <div className="ml-2 flex flex-shrink-0">
+                          <p className={`inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 ${
+                              doc.status === 'Complete' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                            {doc.status}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-2 sm:flex sm:justify-between">
+                        <div className="sm:flex">
+                          <p className="flex items-center text-sm text-gray-500">
+                            {getStatusIcon(doc.status)}
+                            <span className="ml-1.5">
+                              Uploaded on {new Date(doc.uploaded_at).toLocaleDateString()}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              )}
             </div>
-            <p className="text-gray-600 mb-4 text-center">
-              Upload your contract documents, offer letters, or job descriptions for analysis.
-            </p>
-            <Link 
-              href="/upload"
-              className="block w-full bg-green-600 text-white text-center py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
-            >
-              Upload Files
-            </Link>
-          </div>
-
-          {/* Step 3: Analyze */}
-          <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
-            <div className="text-center mb-4">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-purple-600 font-bold text-xl">3</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900">Get Analysis</h3>
-            </div>
-            <p className="text-gray-600 mb-4 text-center">
-              Receive AI-powered insights and recommendations tailored to your career goals.
-            </p>
-            <Link 
-              href="/debug/analyze"
-              className="block w-full bg-purple-600 text-white text-center py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              Run Analysis
-            </Link>
           </div>
         </div>
-
-        {/* Results Section */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">View Your Results</h3>
-          <div className="text-center">
-            <p className="text-gray-600 mb-4">
-              Already completed your analysis? View your personalized contract summary and recommendations.
-            </p>
-            <Link 
-              href="/review-summary"
-              className="inline-block bg-indigo-600 text-white py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors font-medium"
-            >
-              View Analysis Summary
-            </Link>
-          </div>
-        </div>
-
-        {/* Debug Section */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Debug & Testing</h3>
-          <div className="grid md:grid-cols-5 gap-4">
-            <Link 
-              href="/debug/database"
-              className="text-center p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-            >
-              <div className="font-medium text-blue-900">Database Status</div>
-              <div className="text-sm text-blue-600">Check table setup</div>
-            </Link>
-            <Link 
-              href="/debug/session"
-              className="text-center p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
-            >
-              <div className="font-medium text-green-900">Session Debug</div>
-              <div className="text-sm text-green-600">Login persistence</div>
-            </Link>
-            <Link 
-              href="/debug/intake"
-              className="text-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <div className="font-medium text-gray-900">Profile Debug</div>
-              <div className="text-sm text-gray-600">View saved profile data</div>
-            </Link>
-            <Link 
-              href="/debug/upload"
-              className="text-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <div className="font-medium text-gray-900">Upload Debug</div>
-              <div className="text-sm text-gray-600">View uploaded files</div>
-            </Link>
-            <Link 
-              href="/debug/analyze"
-              className="text-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <div className="font-medium text-gray-900">Analysis Debug</div>
-              <div className="text-sm text-gray-600">Run contract analysis</div>
-            </Link>
-          </div>
-        </div>
-
-        {/* Reviewer Dashboard Link */}
-        <div className="mt-8 text-center">
-          <Link href="/reviewer/dashboard" className="inline-block bg-blue-700 text-white py-2 px-6 rounded-lg hover:bg-blue-800 font-medium mt-4">
-            Reviewer Dashboard
-          </Link>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="mt-8 text-center text-sm text-gray-500">
-          <p>User ID: {user.id}</p>
-        </div>
-      </div>
+      </main>
     </div>
   );
 }

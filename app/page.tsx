@@ -15,10 +15,10 @@ export default function Home() {
             <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Trusted</span>
           </div>
           <div className="ml-auto flex items-center gap-4">
-            <Link href="/login" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-gray-600 hover:text-gray-900">
+            <Link href="/login" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900">
               Log in
             </Link>
-            <Link href="/login" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg">
+            <Link href="/login" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-white h-10 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg">
               Get Started
             </Link>
           </div>
@@ -52,14 +52,12 @@ export default function Home() {
                 <div className="flex flex-col gap-4 min-[400px]:flex-row">
                   <Link
                     href="/login"
-                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg text-lg py-6 h-auto"
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg text-lg px-8 py-6 h-auto"
                   >
                     Start Free Analysis
                     <ArrowRight className="h-5 w-5 ml-2" />
                   </Link>
-                  <button
-                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8 text-lg py-6 h-auto border-2"
-                  >
+                  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground text-lg px-8 py-6 h-auto">
                     Watch Demo
                   </button>
                 </div>
@@ -103,51 +101,39 @@ export default function Home() {
             </ScrollFadeIn>
             <div className="grid gap-8 md:grid-cols-3">
               <ScrollFadeIn delay={0.1}>
-                <div className="rounded-lg border bg-card text-card-foreground shadow-sm group relative bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
-                  <div className="flex flex-col space-y-1.5 p-6">
-                    <div className="mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
-                      <FileText className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-semibold leading-none tracking-tight">Upload your offer</h3>
+                <div className="group relative bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-blue-100">
+                  <div className="mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
+                    <FileText className="h-8 w-8 text-white" />
                   </div>
-                  <div className="p-6 pt-0">
-                    <p className="text-gray-600 leading-relaxed">
-                      Upload your job offer letter or contract and provide basic context about the role. We support PDF
-                      files and keep your data secure.
-                    </p>
-                  </div>
+                  <h3 className="text-xl font-semibold mb-3">Upload your offer</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Upload your job offer letter or contract and provide basic context about the role. We support PDF
+                    files and keep your data secure.
+                  </p>
                 </div>
               </ScrollFadeIn>
               <ScrollFadeIn delay={0.2}>
-                <div className="rounded-lg border bg-card text-card-foreground shadow-sm group relative bg-gradient-to-br from-green-50 to-emerald-50 border-green-100 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
-                  <div className="flex flex-col space-y-1.5 p-6">
-                    <div className="mb-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
-                      <Sparkles className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-semibold leading-none tracking-tight">Expert review</h3>
+                <div className="group relative bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-green-100">
+                  <div className="mb-6 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
+                    <Sparkles className="h-8 w-8 text-white" />
                   </div>
-                  <div className="p-6 pt-0">
-                    <p className="text-gray-600 leading-relaxed">
-                      Our AI experts review the document, extract key clauses, and identify potential red flags using
-                      advanced contract analysis.
-                    </p>
-                  </div>
+                  <h3 className="text-xl font-semibold mb-3">Expert review</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Our AI experts review the document, extract key clauses, and identify potential red flags using
+                    advanced contract analysis.
+                  </p>
                 </div>
               </ScrollFadeIn>
               <ScrollFadeIn delay={0.3}>
-                <div className="rounded-lg border bg-card text-card-foreground shadow-sm group relative bg-gradient-to-br from-purple-50 to-violet-50 border-purple-100 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
-                  <div className="flex flex-col space-y-1.5 p-6">
-                    <div className="mb-4 bg-gradient-to-r from-purple-600 to-violet-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
-                      <CheckCircle className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-semibold leading-none tracking-tight">Get insights</h3>
+                <div className="group relative bg-gradient-to-br from-purple-50 to-violet-50 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-purple-100">
+                  <div className="mb-6 bg-gradient-to-r from-purple-600 to-violet-600 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
+                    <CheckCircle className="h-8 w-8 text-white" />
                   </div>
-                  <div className="p-6 pt-0">
-                    <p className="text-gray-600 leading-relaxed">
-                      Review a detailed report with explanations and recommendations for negotiation. Download or share
-                      your analysis.
-                    </p>
-                  </div>
+                  <h3 className="text-xl font-semibold mb-3">Get insights</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Review a detailed report with explanations and recommendations for negotiation. Download or share
+                    your analysis.
+                  </p>
                 </div>
               </ScrollFadeIn>
             </div>
@@ -190,7 +176,7 @@ export default function Home() {
                 </p>
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg text-lg py-6 h-auto"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg text-lg px-8 py-6 h-auto"
                 >
                   Get Started Free
                   <ArrowRight className="h-5 w-5 ml-2" />
