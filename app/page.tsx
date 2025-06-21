@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle, FileText, Sparkles } from "lucide-react"
+import { ArrowRight, CheckCircle, FileText, Sparkle, Sparkles, Star } from "lucide-react"
 import Link from "next/link"
 import Logo from "@/components/Logo"
 import HeroAnimation from "@/components/hero-animation"
@@ -31,18 +31,17 @@ export default function Home() {
                 <div className="space-y-4">
                   <div className="font-heading inline-flex items-center gap-2 bg-indigo-100 text-anchor px-4 py-2 rounded-full text-sm font-medium">
                     <Sparkles className="h-4 w-4" />
-                    AI-Powered Contract Analysis
+                    For professionals reviewing job offers
                   </div>
                   <h1 className="font-heading text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
-                    Make smarter job decisions with{" "}
+                    Know what you're signing — and what to {" "}
                     <span className="text-anchor">
-                      AI-powered
+                     push 
                     </span>{" "}
-                    contract reviews
+                    for.
                   </h1>
                   <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
-                    Trusted helps professionals analyze offer letters, extract key insights, and identify red flags
-                    before you sign. Get expert-level contract review in minutes, not days.
+                  Trusted breaks down your offer, flags risks, and helps you make a decision you won’t second-guess.
                   </p>
                 </div>
                 <div className="flex flex-col gap-4 min-[400px]:flex-row">
@@ -50,7 +49,7 @@ export default function Home() {
                     href="/login"
                     className="font-heading font-bold inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm text-white bg-anchor hover:bg-anchor-light shadow-lg text-lg px-8 py-6 h-auto"
                   >
-                    Start Free Analysis
+                    Start Free Review
                     <ArrowRight className="h-5 w-5 ml-2" />
                   </Link>
                   <button className="font-heading font-bold inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm border border-input bg-background hover:bg-accent hover:text-accent-foreground text-lg px-8 py-6 h-auto">
@@ -60,15 +59,15 @@ export default function Home() {
                 <div className="flex items-center gap-6 text-sm text-gray-600">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    Free to start
+                    No wait
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    5-minute analysis
+                    Your eyes only
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    Expert insights
+                    Reviewed by experts
                   </div>
                 </div>
               </div>
@@ -91,7 +90,7 @@ export default function Home() {
               <div className="text-center space-y-4 mb-16">
                 <h2 className="font-heading text-3xl font-bold sm:text-4xl">How it works</h2>
                 <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                  Our AI-powered platform analyzes your job offers and highlights potential issues in minutes
+                Trusted reviews your offer and flags what’s risky, missing, or worth pushing for — in minutes, not days.
                 </p>
               </div>
             </ScrollFadeIn>
@@ -103,8 +102,7 @@ export default function Home() {
                   </div>
                   <h3 className="font-heading text-xl font-semibold mb-3">Upload your offer</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Upload your job offer letter or contract and provide basic context about the role. We support PDF
-                    files and keep your data secure.
+                  Drop in your offer and share a few quick details — your role, level, and what matters most to you.
                   </p>
                 </div>
               </ScrollFadeIn>
@@ -115,8 +113,7 @@ export default function Home() {
                   </div>
                   <h3 className="font-heading text-xl font-semibold mb-3">Expert review</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Our AI experts review the document, extract key clauses, and identify potential red flags using
-                    advanced contract analysis.
+                  We extract key clauses, benchmark them against market norms, and flag anything unusual — or worth a second look.
                   </p>
                 </div>
               </ScrollFadeIn>
@@ -127,8 +124,7 @@ export default function Home() {
                   </div>
                   <h3 className="font-heading text-xl font-semibold mb-3">Get insights</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Review a detailed report with explanations and recommendations for negotiation. Download or share
-                    your analysis.
+                  Get a clear, expert-reviewed summary with negotiation recommendations you can actually use.
                   </p>
                 </div>
               </ScrollFadeIn>
@@ -144,16 +140,16 @@ export default function Home() {
                 <h2 className="font-heading text-3xl font-bold sm:text-4xl">Trusted by professionals everywhere</h2>
                 <div className="grid gap-8 md:grid-cols-3 max-w-4xl mx-auto">
                   <div className="text-center">
-                    <div className="text-4xl font-bold mb-2">10,000+</div>
-                    <div className="text-indigo-100">Contracts analyzed</div>
+                    <div className="text-4xl font-bold mb-2">100%</div>
+                    <div className="text-indigo-100">said they felt more confident negotiating</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-4xl font-bold mb-2">$2.5M+</div>
-                    <div className="text-indigo-100">Additional compensation negotiated</div>
+                    <div className="text-4xl font-bold mb-2">15%+</div>
+                    <div className="text-indigo-100">average improvement in total comp</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-4xl font-bold mb-2">98%</div>
-                    <div className="text-indigo-100">User satisfaction rate</div>
+                    <div className="text-4xl font-bold mb-2">1:1</div>
+                    <div className="text-indigo-100">Expert review incldued with every analysis</div>
                   </div>
                 </div>
               </div>
@@ -166,15 +162,15 @@ export default function Home() {
           <div className="container px-4 md:px-6">
             <ScrollFadeIn>
               <div className="text-center space-y-8 max-w-3xl mx-auto">
-                <h2 className="font-heading text-3xl font-bold sm:text-4xl">Ready to analyze your contract?</h2>
+                <h2 className="font-heading text-3xl font-bold sm:text-4xl">Don't sign blind.</h2>
                 <p className="text-xl text-gray-600">
-                  Join thousands of professionals who've made smarter career decisions with Trusted
+                Join others who reviewed their offer — and walked into their next role with leverage.
                 </p>
                 <Link
                   href="/login"
                   className="font-heading font-bold inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm text-white bg-anchor hover:bg-anchor-light shadow-lg text-lg px-8 py-6 h-auto"
                 >
-                  Get Started Free
+                  Get Started Now
                   <ArrowRight className="h-5 w-5 ml-2" />
                 </Link>
               </div>
