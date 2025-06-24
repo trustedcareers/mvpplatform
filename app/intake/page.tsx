@@ -26,7 +26,7 @@ export default function IntakePage() {
         </div>
         
         <div className="mt-10 flex justify-center">
-          <Link href="/" className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-colors font-semibold">Back to Home</Link>
+          <Link href="/dashboard" className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-colors font-semibold">Back to Dashboard</Link>
         </div>
       </div>
     </div>

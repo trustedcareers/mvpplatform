@@ -1,17 +1,17 @@
 import * as React from "react";
 import Link from "next/link";
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-// Client for review_summary and user_context (anon key)
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-// Admin client for auth.users (service role key)
-const adminSupabase = createClient(supabaseUrl, supabaseServiceRoleKey, { auth: { persistSession: false } });
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function ReviewerDashboardPage() {
+  const supabase = createServerComponentClient({ cookies });
+
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+    redirect('/login');
+  }
+
   // Fetch review summaries
   const { data: reviews, error: reviewsError } = await supabase
     .from('review_summary')
@@ -37,23 +37,8 @@ export default async function ReviewerDashboardPage() {
     }
   }
 
-  // Fetch users from auth.users using Admin API
-  let users: any[] = [];
-  let usersError: any = null;
-  try {
-    const { data, error } = await adminSupabase.auth.admin.listUsers();
-    if (error) {
-      usersError = error;
-    } else {
-      users = data.users;
-    }
-  } catch (err) {
-    usersError = err instanceof Error ? err.message : String(err);
-  }
-
-  // Merge reviews with user info and user context
+  // Merge reviews with user context (no admin user info)
   const merged = (reviews || []).map((review: any) => {
-    const user = (users || []).find((u: any) => u.id === review.user_id);
     const context = (userContexts || []).find((c: any) => c.user_id === review.user_id);
     // reviewer_notes_count from notesCountMap
     const reviewerNotesCount = notesCountMap[review.id] || 0;
@@ -80,10 +65,10 @@ export default async function ReviewerDashboardPage() {
       <div className="mb-4">
         <Link href="/" className="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 font-medium">Go to Candidate View</Link>
       </div>
-      {(reviewsError || usersError || userContextError || reviewerNotesError) && (
+      {(reviewsError || userContextError || reviewerNotesError) && (
         <div className="text-red-600 mb-2">
-          <div>Error loading reviews, users, or user context.</div>
-          <pre className="whitespace-pre-wrap text-xs bg-red-100 p-2 border border-red-300 rounded">{JSON.stringify(reviewsError || usersError || userContextError || reviewerNotesError, null, 2)}</pre>
+          <div>Error loading reviews or user context.</div>
+          <pre className="whitespace-pre-wrap text-xs bg-red-100 p-2 border border-red-300 rounded">{JSON.stringify(reviewsError || userContextError || reviewerNotesError, null, 2)}</pre>
         </div>
       )}
       <table className="min-w-full border mt-4">

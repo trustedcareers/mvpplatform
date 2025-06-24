@@ -3,8 +3,9 @@
 import { useUser } from '@supabase/auth-helpers-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+import DashboardHeader from './DashboardHeader';
 
-const PUBLIC_PATHS = ['/login', '/auth/callback'];
+const PUBLIC_PATHS = ['/', '/login', '/auth/callback'];
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -39,8 +40,15 @@ export function AppLayout({ children }: AppLayoutProps) {
     );
   }
 
+  const isPublicPath = pathname && PUBLIC_PATHS.includes(pathname);
+
+  if (isPublicPath) {
+    return <>{children}</>;
+  }
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50/50">
+      <DashboardHeader />
       <main className="flex-1">
         {children}
       </main>

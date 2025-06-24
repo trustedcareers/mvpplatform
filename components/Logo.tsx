@@ -33,14 +33,16 @@ const Logo = ({ variant = 'horizontal', size, className, asLink = false }: LogoP
   const { width, height } = sizeMap[size || defaultSize];
 
   const logoImage = (
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      priority
-    />
+    <span className={className} style={{ display: 'inline-block', lineHeight: 0 }}>
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        style={{ maxWidth: '100%', height: 'auto' }}
+        priority
+      />
+    </span>
   );
 
   if (asLink) {

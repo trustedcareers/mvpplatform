@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Lato, Montserrat } from 'next/font/google';
 import "./globals.css";
 import { Providers } from "./providers";
+import { AppLayout } from "@/components/layouts/AppLayout";
 
 const lato = Lato({
   weight: ['700', '900'], // For headlines and bold emphasis
@@ -27,14 +28,16 @@ export const metadata: Metadata = {
     ],
     apple: '/favicons/apple-touch-icon.png',
   },
-  manifest: '/favicons/web-app-manifest-512x512.png',
+  manifest: '/manifest.webmanifest',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${lato.variable} ${montserrat.variable} antialiased`}>
       <body className="font-body">
-        <Providers>{children}</Providers>
+        <Providers>
+          <AppLayout>{children}</AppLayout>
+        </Providers>
       </body>
     </html>
   );

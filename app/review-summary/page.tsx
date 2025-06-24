@@ -16,6 +16,7 @@ interface ReviewSummary {
   recommendation: string;
   negotiation_priorities: string[];
   created_at: string;
+  reviewer_notes?: any[];
 }
 
 interface ReviewClause {

@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic';
 export default async function Dashboard() {
   const supabase = createServerComponentClient({ cookies });
   const { data: { session } } = await supabase.auth.getSession();
+  console.log('SESSION:', session);
 
   if (!session) {
     redirect('/login');
@@ -23,18 +24,17 @@ export default async function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container flex h-16 items-center justify-between px-4 sm:px-8">
-          <Logo asLink />
-          <LogoutButton />
-        </div>
-      </header>
       <main className="container mx-auto p-4 sm:p-6 lg:p-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold text-gray-900 font-heading">Your Documents</h1>
           <Link href="/upload" className="font-heading font-bold inline-flex items-center rounded-md bg-anchor px-3 py-2 text-sm text-white shadow-sm hover:bg-anchor-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-anchor-dark">
             <Upload className="-ml-0.5 mr-1.5 h-5 w-5" />
             Upload New Document
+          </Link>
+        </div>
+        <div className="mb-6">
+          <Link href="/intake" className="inline-block font-heading font-bold rounded-md bg-blue-100 text-blue-800 px-4 py-2 shadow-sm hover:bg-blue-200">
+            Complete Your Profile
           </Link>
         </div>
 
