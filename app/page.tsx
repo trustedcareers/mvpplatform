@@ -23,25 +23,23 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 md:py-32 relative overflow-hidden bg-hero-gradient">
-          <div className="absolute inset-0 bg-primary-gradient opacity-80"></div>
+        <section className="py-20 md:py-32 relative overflow-hidden bg-gradient-to-br from-slate-50 via-purple-50 to-violet-50">
           <div className="container px-4 md:px-6 relative">
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
               <div className="space-y-8">
                 <div className="space-y-4">
-                  <div className="font-heading inline-flex items-center gap-2 bg-section-violet text-brand px-4 py-2 rounded-full text-sm font-medium">
+                  <div className="inline-flex items-center gap-2 bg-[#2e2a72]/10 text-[#2e2a72] px-4 py-2 rounded-full text-sm font-medium">
                     <Sparkles className="h-4 w-4" />
                     For professionals reviewing job offers
                   </div>
-                  <h1 className="font-heading text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
-                    Know what you're signing — and what to {" "}
-                    <span className="text-brand">
-                     push 
-                    </span>{" "}
-                    for.
+                  <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl font-heading text-gray-900">
+                    Know what you're signing — and{" "}
+                    <span className="bg-gradient-to-r from-[#2e2a72] to-purple-600 bg-clip-text text-transparent">
+                      what to push for.
+                    </span>
                   </h1>
-                  <p className="text-xl text-brand/80 leading-relaxed max-w-2xl">
-                  Trusted breaks down your offer, flags risks, and helps you make a decision you won't second-guess.
+                  <p className="text-xl text-gray-700 leading-relaxed max-w-2xl">
+                    Trusted breaks down your offer, flags risks, and helps you make a decision you won't second-guess.
                   </p>
                 </div>
                 <div className="flex flex-col gap-4 min-[400px]:flex-row">
