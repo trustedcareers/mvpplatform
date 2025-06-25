@@ -71,7 +71,7 @@ export default function Home() {
               </div>
               <div className="mx-auto lg:ml-auto flex justify-center">
                 <div className="relative">
-                  <div className="absolute -inset-4 bg-primary-gradient rounded-2xl blur-xl"></div>
+                  <div className="absolute -inset-2 bg-gradient-to-r from-[#2e2a72]/10 to-purple-400/10 rounded-2xl blur-lg"></div>
                   <div className="relative">
                     <HeroAnimation />
                   </div>
@@ -82,7 +82,7 @@ export default function Home() {
         </section>
 
         {/* How it works */}
-        <section className="py-20 bg-section-purple relative">
+        <section className="py-20 bg-white relative">
           <div className="container px-4 md:px-6">
             <ScrollFadeIn>
               <div className="text-center space-y-4 mb-16">
@@ -94,7 +94,7 @@ export default function Home() {
             </ScrollFadeIn>
             <div className="grid gap-8 md:grid-cols-3">
               <ScrollFadeIn delay={0.1}>
-                <div className="group relative bg-section-violet p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-section-purple">
+                <div className="group relative bg-section-violet p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-section-purple flex flex-col items-center text-center">
                   <div className="mb-6 bg-brand rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
                     <FileText className="h-8 w-8 text-white" />
                   </div>
@@ -105,7 +105,7 @@ export default function Home() {
                 </div>
               </ScrollFadeIn>
               <ScrollFadeIn delay={0.2}>
-                <div className="group relative bg-success/10 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-success/20">
+                <div className="group relative bg-success/10 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-success/20 flex flex-col items-center text-center">
                   <div className="mb-6 bg-gradient-to-r from-success to-green-400 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
                     <Sparkles className="h-8 w-8 text-white" />
                   </div>
@@ -116,7 +116,7 @@ export default function Home() {
                 </div>
               </ScrollFadeIn>
               <ScrollFadeIn delay={0.3}>
-                <div className="group relative bg-section-purple p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-section-violet">
+                <div className="group relative bg-section-purple p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-section-violet flex flex-col items-center text-center">
                   <div className="mb-6 bg-gradient-to-r from-brand to-purple-500 rounded-2xl w-16 h-16 flex items-center justify-center shadow-lg">
                     <CheckCircle className="h-8 w-8 text-white" />
                   </div>
