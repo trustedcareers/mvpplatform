@@ -122,8 +122,6 @@ export default function IntakeForm() {
         return;
       }
 
-      console.log('[IntakeForm] Loading existing profile for user:', user.id);
-      
       try {
         const { data: profile, error } = await supabaseClient
           .from("user_context")
@@ -134,91 +132,95 @@ export default function IntakeForm() {
         if (error && error.code !== 'PGRST116') {
           console.error('[IntakeForm] Error loading profile:', error);
         } else if (profile) {
-          console.log('[IntakeForm] Found existing profile:', profile);
           setExistingProfile(profile);
-          
-          // Populate form with existing data
           setValue('role_title', profile.role_title || '');
+          setRoleTitle(profile.role_title || '');
           setValue('level', profile.level || '');
+          setLevel(profile.level || '');
           setValue('industry', profile.industry || '');
-          setValue('situation', profile.situation || '');
-          setValue('target_comp_base', profile.target_comp_base || '');
+          setIndustry(profile.industry || '');
+          setValue('manager_team_fit', profile.manager_team_fit || '');
+          setManagerFit(profile.manager_team_fit || '');
+          setValue('target_comp_base', profile.target_comp_base || '150000');
+          setTargetCompBase(profile.target_comp_base ? String(profile.target_comp_base) : '150000');
+          setValue('target_bonus', profile.target_bonus || '');
+          setTargetBonus(profile.target_bonus ? String(profile.target_bonus) : '');
+          setBonusNA(profile.target_bonus === null);
+          setValue('target_equity', profile.target_equity || '');
+          setTargetEquity(profile.target_equity ? String(profile.target_equity) : '');
+          setEquityNA(profile.target_equity === null);
           setValue('target_comp_total', profile.target_comp_total || '');
+          setValue('comp_comments', profile.comp_comments || '');
+          setCompComments(profile.comp_comments || '');
           setValue('priorities', profile.priorities || []);
-          setValue('confidence_rating', profile.confidence_rating || 3);
-        } else {
-          console.log('[IntakeForm] No existing profile found');
+          setSelectedPriorities(profile.priorities || []);
+          setPriorityOrder((profile.priorities && profile.priorities.length > 0) ? profile.priorities : ["", "", ""]);
+          setValue('negotiation_confidence', profile.negotiation_confidence ?? 3);
+          setNegotiationConfidence(profile.negotiation_confidence ?? 3);
+          setValue('company_needs_you', profile.company_needs_you ?? 3);
+          setCompanyNeedsYou(profile.company_needs_you ?? 3);
+          setValue('you_need_job', profile.you_need_job ?? 3);
+          setYouNeedJob(profile.you_need_job ?? 3);
+          setValue('negotiation_styles', profile.negotiation_styles || []);
+          setNegotiationStyles(profile.negotiation_styles || []);
+          setValue('reflection', profile.reflection || '');
+          setReflection(profile.reflection || '');
         }
       } catch (error) {
         console.error('[IntakeForm] Error loading profile:', error);
       }
-      
       setLoadingData(false);
     };
-
     loadExistingProfile();
   }, [user, setValue]);
 
   const onSubmit = async (data: any) => {
-    console.log('[IntakeForm] Starting submission with data:', data);
     setLoading(true);
     setResult(null);
-
     if (!user) {
-      console.log('[IntakeForm] No user found');
       setResult("Authentication error. Please log in.");
       setLoading(false);
       return;
     }
-
     const profileData = {
-      ...data,
       user_id: user.id,
-      priorities: data.priorities || [],
-      confidence_rating: Number(data.confidence_rating),
-      target_comp_base: Number(data.target_comp_base),
-      target_comp_total: Number(data.target_comp_total),
+      role_title: roleTitle,
+      level,
+      industry,
+      manager_team_fit: managerFit,
+      target_comp_base: Number(targetCompBase) || 0,
+      target_bonus: bonusNA ? null : (Number(targetBonus) || 0),
+      target_equity: equityNA ? null : (Number(targetEquity) || 0),
+      target_comp_total: Number(targetCompBase || 0) + (bonusNA ? 0 : Number(targetBonus) || 0) + (equityNA ? 0 : Number(targetEquity) || 0),
+      comp_comments: compComments,
+      priorities: priorityOrder.filter((p) => p),
+      negotiation_confidence: negotiationConfidence,
+      company_needs_you: companyNeedsYou,
+      you_need_job: youNeedJob,
+      negotiation_styles: negotiationStyles,
+      reflection,
     };
-
-    console.log('[IntakeForm] Profile data:', profileData);
-
     try {
       let result;
-      
       if (existingProfile) {
-        // Update existing profile
-        console.log('[IntakeForm] Updating existing profile');
         result = await supabaseClient
           .from("user_context")
           .update(profileData)
           .eq("user_id", user.id);
       } else {
-        // Create new profile
-        console.log('[IntakeForm] Creating new profile');
         result = await supabaseClient
           .from("user_context")
           .insert([profileData]);
       }
-
-      console.log('[IntakeForm] Database result:', result);
-
       if (result.error) {
-        console.error('[IntakeForm] Database error:', result.error);
         setResult("Error: " + result.error.message);
       } else {
-        console.log('[IntakeForm] Successfully saved user context');
         setResult(existingProfile ? "Profile updated successfully!" : "Profile created successfully!");
-        
-        // If this was a new profile, mark it as existing for future updates
-        if (!existingProfile) {
-          setExistingProfile(profileData);
-        }
+        if (!existingProfile) setExistingProfile(profileData);
       }
     } catch (error: any) {
-      console.error('[IntakeForm] Submission error:', error);
       setResult("Error: " + error.message);
     }
-
     setLoading(false);
   };
 
