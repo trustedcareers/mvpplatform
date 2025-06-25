@@ -541,26 +541,6 @@ export default function IntakeForm() {
                   </div>
                 </div>
               )}
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  className="bg-[#2E2A72] text-white px-4 py-2 rounded-md hover:bg-[#23205a] disabled:opacity-50 flex items-center justify-center"
-                  onClick={handleNextStep}
-                  disabled={priorityOrder.filter((p) => p).length === 0 || savingPriorities}
-                >
-                  {savingPriorities ? (
-                    <span className="flex items-center">
-                      <svg className="animate-spin h-4 w-4 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
-                      Saving...
-                    </span>
-                  ) : (
-                    "Next"
-                  )}
-                </button>
-              </div>
-              {saveError && (
-                <div className="text-red-600 text-sm mt-2 text-center">{saveError}</div>
-              )}
             </div>
             <div className="flex justify-between gap-2 mt-6">
               <button type="button" className="border border-gray-300 px-4 py-2 rounded-md" onClick={() => setTab("comp")}>Back</button>
