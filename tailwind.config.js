@@ -20,17 +20,26 @@ module.exports = {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
-  			background: 'hsl(var(--background))',
-  			foreground: 'hsl(var(--foreground))',
+  			background: '#f8fafc',
+  			section: {
+  				purple: '#faf5ff',
+  				violet: '#f3e8ff',
+  			},
+  			card: '#ffffff',
   			anchor: {
   				DEFAULT: '#2e2a72',
   				light: '#4f4aa0',
   				dark: '#1f1b4e',
-  				fg: '#ffffff'
+  				fg: '#ffffff',
   			},
+  			brand: '#2e2a72',
+  			success: '#10b981',
+  			warning: '#f59e0b',
+  			error: '#ef4444',
   			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
+  				DEFAULT: '#2e2a72',
+  				gradient: 'linear-gradient(135deg, #2e2a72 0%, #9333ea 100%)',
+  				hover: 'linear-gradient(135deg, #241f5c 0%, #7c2d12 100%)',
   			},
   			secondary: {
   				DEFAULT: 'hsl(var(--secondary))',
@@ -51,10 +60,6 @@ module.exports = {
   			popover: {
   				DEFAULT: 'hsl(var(--popover))',
   				foreground: 'hsl(var(--popover-foreground))'
-  			},
-  			card: {
-  				DEFAULT: 'hsl(var(--card))',
-  				foreground: 'hsl(var(--card-foreground))'
   			},
   			chart: {
   				'1': 'hsl(var(--chart-1))',
@@ -92,7 +97,9 @@ module.exports = {
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		},
   		backgroundImage: {
-  			'hero-gradient': 'linear-gradient(to bottom right, #e0e7ff, #f0f4ff)'
+  			'hero-gradient': 'linear-gradient(135deg, #2e2a72 0%, #9333ea 100%)',
+  			'primary-gradient': 'linear-gradient(135deg, #2e2a72 0%, #9333ea 100%)',
+  			'primary-hover': 'linear-gradient(135deg, #241f5c 0%, #7c2d12 100%)',
   		},
   		fontFamily: {
   			heading: [
