@@ -20,7 +20,8 @@ module.exports = {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
-  			background: '#f8fafc',
+  			background: 'hsl(var(--background))',
+  			foreground: 'hsl(var(--foreground))',
   			section: {
   				purple: '#faf5ff',
   				violet: '#f3e8ff',
